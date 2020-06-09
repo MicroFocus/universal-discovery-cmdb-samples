@@ -1,0 +1,13 @@
+{
+	"name": "AWSDiscovery",
+	"jobs": [{
+			"jobName": "AWS Event Based Discovery",
+			"jobParameters": {
+				"RegionsInterested": "*",
+				"SqsQueuePrefixForDiscovery": "universal-discovery"
+			}
+		}, {
+			"jobName": "AWS by Web Services",
+		}
+	]
+}

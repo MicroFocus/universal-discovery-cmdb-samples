@@ -1,0 +1,11 @@
+{
+	"name": "AWSCredentialProfile",
+	"oob": false,
+	"credentials": [{
+			"domain": "DefaultDomain",
+			"protocols": {
+				"awsprotocol": ["42_1_CMS"]
+			}
+		}
+	]
+}

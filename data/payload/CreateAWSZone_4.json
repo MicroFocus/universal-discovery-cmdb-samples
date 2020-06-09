@@ -1,0 +1,16 @@
+{
+  "name": "AWSZone",
+  "activated": false,
+  "ipRangeProfiles": [
+    {
+      "ipRangeProfileId": "All IP Range Groups"
+    }
+  ],
+  "discoveryActivities": [
+    {
+      "discoveryProfileId": "AWSDiscovery",
+      "scheduleProfileId": "Interval 1 Day (Default)",
+      "credentialProfileId": "AWSCredentialProfile"
+    }
+  ]
+}

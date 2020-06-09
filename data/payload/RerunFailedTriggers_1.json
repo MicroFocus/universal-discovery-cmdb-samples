@@ -1,0 +1,11 @@
+{
+  "operation": "rerun",
+  "triggerItems": [
+    {
+      "jobId": "string",
+      "mzoneId": "string",
+      "triggerCiId": "string",
+      "triggerCiType": "string"
+    }
+  ]
+}

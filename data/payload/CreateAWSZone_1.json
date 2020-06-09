@@ -1,0 +1,16 @@
+{
+	"user_label": "AWSCredential",
+	"authentication_type": "Long-Term Access Key",
+	"protocol_username": "accessKey",
+	"protocol_password": "secreteKey",
+	"protocol_timeout": "2000",
+	"ec2_endpoint": null,
+	"iam_endpoint": null,
+	"rds_endpoint": null,
+	"proxy_host": "proxyhost",
+	"proxy_port": "80",
+	"password_vault_type": null,
+	"password_vault_reference_id": null,
+	"domainName": "DefaultDomain",
+	"credentialType": "awsprotocol"
+}

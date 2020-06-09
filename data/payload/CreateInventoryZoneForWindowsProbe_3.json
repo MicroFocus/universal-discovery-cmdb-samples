@@ -1,0 +1,11 @@
+{
+	"name": "ProbeInventoryJobgroup",
+	"jobs": [{
+			"jobName": "Range IPs by ICMP",
+		}, {
+			"jobName": "Host Resources and Applications by Shell",
+		}, {
+			"jobName": "Host Connection by Shell",
+		}
+	]
+}

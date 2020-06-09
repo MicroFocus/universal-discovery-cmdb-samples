@@ -1,0 +1,31 @@
+{
+	"zone": {
+		"name": "myzone",
+		"activated": false,
+		"ipRangeProfiles": [{
+				"ipRangeProfileId": "All IP Range Groups"
+			}
+		],
+		"discoveryActivities": [{
+				"discoveryProfileId": "ping",
+				"scheduleProfileId": "Interval 1 Day (Default)",
+				"credentialProfileId": "All Credentials"
+			}
+		]
+	},
+	"jobGroups": [{
+			"name": "ping",
+			"jobs": [{
+					"jobName": "Range IPs by ICMP",
+					"jobDisplayName": "Range IPs by ICMP",
+					"adapterName": "ICMP_NET_Dis_IpRange",
+					"inputCI": "discoveryprobegateway",
+					"jobType": "DynamicService",
+					"protocols": null,
+					"jobParameters": {},
+					"jobInvokeOnNewTrigger": true
+				}
+			]
+		}
+	]
+}

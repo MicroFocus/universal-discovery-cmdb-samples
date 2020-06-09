@@ -1,0 +1,9 @@
+{
+	"operation": "rerunWithCommunicationLog",
+	"triggerItems": [{
+			"jobId": "Range IPs by ICMP",
+			"mzoneId": "myzone",
+			"triggerCiId": "bd1ab6393fc7b582af79772ca2668388"
+		}
+	]
+}

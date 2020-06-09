@@ -1,0 +1,11 @@
+{
+	"name": "ProbeInventoryCredentialProfile",
+	"oob": false,
+	"credentials": [{
+			"domain": "DefaultDomain",
+			"protocols": {
+				"ntadminprotocol": ["42_1_CMS"]
+			}
+		}
+	]
+}
