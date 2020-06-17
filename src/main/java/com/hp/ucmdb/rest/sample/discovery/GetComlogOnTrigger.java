@@ -83,7 +83,8 @@ public class GetComlogOnTrigger {
         String triggerId = "";
         String probeName = "";
         try {
-            response = RestApiConnectionUtils.doGet(rootURL + "discovery/triggers?filter=mzoneIds" + URLEncoder.encode("=[" + zonename + "]", "UTF-8"), token);
+            response = RestApiConnectionUtils.doGet(rootURL + "discovery/triggers" + "?start=" + start
+                    + "&count=" + bulkSize + "&sortField=ciLabel&orderByAsc=true&" + "filter=mzoneIds" + URLEncoder.encode("=[" + zonename + "]", "UTF-8"), token);
             ObjectMapper objectMapper = new ObjectMapper();
             JsonNode triggers = objectMapper.readTree(response);
             total = triggers.get("total").asInt();
@@ -96,7 +97,7 @@ public class GetComlogOnTrigger {
             probeName = item.get("probeName").asText();
 
             // rerun with comlog
-            String content = PayloadUtils.loadContent(this.getClass().getSimpleName(), count);
+            String content = PayloadUtils.loadContent(this.getClass().getSimpleName(), fileCount);
             fileCount++;
             JsonNode o = objectMapper.readValue(content, JsonNode.class);
             ((ObjectNode) o.get("triggerItems").get(0)).put("jobId", jobId);
@@ -114,14 +115,15 @@ public class GetComlogOnTrigger {
         try {
             boolean finished = false;
             while(!finished){
-                response = RestApiConnectionUtils.doGet(rootURL + "discovery/triggers?" + URLEncoder.encode("filter=mzoneIds=[" + zonename + "]&filter=triggerCiId=[" + triggerId + "]", "UTF-8"), token);
+                Thread.sleep(5000);
+                response = RestApiConnectionUtils.doGet(rootURL + "discovery/triggers/" + triggerId
+                        + "?mzoneId=" + zonename + "&jobId=" + URLEncoder.encode(jobId, "UTF-8").replace("+", "%20"), token);
                 ObjectMapper objectMapper = new ObjectMapper();
-                JsonNode triggers = objectMapper.readTree(response);
-                String status = triggers.get("items").get(0).get("status").asText();
+                JsonNode trigger = objectMapper.readTree(response);
+                String status = trigger.get("status").asText();
                 if("SUCCESS".equals(status) || "ERROR".equals(status)|| "WARNING".equals(status)){
                     finished = true;
                 }
-                Thread.sleep(5000);
             }
         } catch (Exception e) {
             e.printStackTrace();
@@ -129,7 +131,8 @@ public class GetComlogOnTrigger {
 
         // get log
         try {
-            response = RestApiConnectionUtils.doPatch(rootURL + "discovery/triggers/" + triggerId + "communicationlog?" + URLEncoder.encode("probeName=" + probeName + "&zoneId=" + zonename + "&jobId=" + jobId, "UTF-8"), token, null);
+            response = RestApiConnectionUtils.doPatch(rootURL + "discovery/triggers/" + triggerId + "/communicationlog?"
+                    + "probeName=" + probeName + "&zoneId=" + zonename + "&jobId=" + URLEncoder.encode(jobId, "UTF-8").replace("+", "%20"), token, null);
             System.out.println(response);
         } catch (Exception e) {
             e.printStackTrace();

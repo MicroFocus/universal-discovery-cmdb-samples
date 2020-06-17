@@ -51,9 +51,24 @@ public class DeleteZoneWithAllReference {
     }
 
     private void execute(String token, String zonename) {
+        // check if new UI backend enabled
+        String response = "";
+        try {
+            response = RestApiConnectionUtils.doGet(rootURL + "infrasetting?name=appilog.collectors.enableZoneBasedDiscovery", token );
+            ObjectMapper objectMapper = new ObjectMapper();
+            JsonNode node = objectMapper.readTree(response);
+            if(!"true".equals(node.get("value").asText())){
+                System.out.println("New Discovery backend is not enabled.");
+                System.exit(0);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            System.exit(0);
+        }
+
+
         int count = 1;
         // get zone info
-        String response;
         Set<String> iprangeProfiles = new HashSet<String>();
         Set<String> discoveryProfiles = new HashSet<String>();
         Set<String> scheduleProfiles = new HashSet<String>();
@@ -96,12 +111,12 @@ public class DeleteZoneWithAllReference {
         // delete underline iprange profile
         try {
             for(String ipProfile : iprangeProfiles){
-                response = RestApiConnectionUtils.doGet(rootURL + "discovery/iprangeprofiles/" + ipProfile, token );
+                response = RestApiConnectionUtils.doGet(rootURL + "discovery/iprangeprofiles/" + URLEncoder.encode(ipProfile,"UTF-8").replace("+", "%20"), token );
                 ObjectMapper objectMapper = new ObjectMapper();
                 JsonNode o = objectMapper.readValue(response, JsonNode.class);
-                if(o.get("oob").toString().equals("false")){
+                if(o.get("oob").asText().equals("false")){
                     // delete the profile
-                    RestApiConnectionUtils.doDelete(rootURL + "discovery/iprangeprofiles/" + ipProfile, token, null);
+                    RestApiConnectionUtils.doDelete(rootURL + "discovery/iprangeprofiles/" + URLEncoder.encode(ipProfile,"UTF-8").replace("+", "%20"), token, null);
                 }
             }
         } catch (Exception e) {
@@ -110,12 +125,12 @@ public class DeleteZoneWithAllReference {
 
         try {
             for(String discoveryProfile : discoveryProfiles){
-                response = RestApiConnectionUtils.doGet(rootURL + "discovery/discoveryprofiles/" + discoveryProfile, token );
+                response = RestApiConnectionUtils.doGet(rootURL + "discovery/discoveryprofiles/" + URLEncoder.encode(discoveryProfile,"UTF-8").replace("+", "%20"), token );
                 ObjectMapper objectMapper = new ObjectMapper();
                 JsonNode o = objectMapper.readValue(response, JsonNode.class);
-                if(o.get("oob").toString().equals("false")){
+                if(o.get("oob").asText().equals("false")){
                     // delete the profile
-                    RestApiConnectionUtils.doDelete(rootURL + "discovery/discoveryprofiles/" + discoveryProfile, token, null);
+                    RestApiConnectionUtils.doDelete(rootURL + "discovery/discoveryprofiles/" + URLEncoder.encode(discoveryProfile,"UTF-8").replace("+", "%20"), token, null);
                 }
             }
         } catch (Exception e) {
@@ -124,12 +139,12 @@ public class DeleteZoneWithAllReference {
 
         try {
             for(String scheduleProfile : scheduleProfiles){
-                response = RestApiConnectionUtils.doGet(rootURL + "discovery/scheduleprofiles/" + URLEncoder.encode(scheduleProfile, "UTF-8"), token );
+                response = RestApiConnectionUtils.doGet(rootURL + "discovery/scheduleprofiles/" + URLEncoder.encode(scheduleProfile, "UTF-8").replace("+", "%20"), token );
                 ObjectMapper objectMapper = new ObjectMapper();
-                JSONObject o = objectMapper.readValue(response, JSONObject.class);
-                if(o.getString("oob").equals("false")){
+                JsonNode o = objectMapper.readValue(response, JsonNode.class);
+                if(o.get("oob").asText().equals("false")){
                     // delete the profile
-                    RestApiConnectionUtils.doDelete(rootURL + "discovery/scheduleprofiles/" + URLEncoder.encode(scheduleProfile, "UTF-8"), token, null);
+                    RestApiConnectionUtils.doDelete(rootURL + "discovery/scheduleprofiles/" + URLEncoder.encode(scheduleProfile, "UTF-8").replace("+", "%20"), token, null);
                 }
             }
         } catch (Exception e) {
@@ -138,12 +153,12 @@ public class DeleteZoneWithAllReference {
 
         try {
             for(String credentialProfile : credentialProfiles){
-                response = RestApiConnectionUtils.doGet(rootURL + "discovery/credentialprofiles/" + URLEncoder.encode(credentialProfile, "UTF-8"), token );
+                response = RestApiConnectionUtils.doGet(rootURL + "discovery/credentialprofiles/" + URLEncoder.encode(credentialProfile, "UTF-8").replace("+", "%20"), token );
                 ObjectMapper objectMapper = new ObjectMapper();
-                JSONObject o = objectMapper.readValue(response, JSONObject.class);
-                if(o.getString("oob").toString().equals("false")){
+                JsonNode o = objectMapper.readValue(response, JsonNode.class);
+                if(o.get("oob").asText().equals("false")){
                     // delete the profile
-                    RestApiConnectionUtils.doDelete(rootURL + "discovery/credentialprofiles/" + URLEncoder.encode(credentialProfile, "UTF-8"), token, null);
+                    RestApiConnectionUtils.doDelete(rootURL + "discovery/credentialprofiles/" + URLEncoder.encode(credentialProfile, "UTF-8").replace("+", "%20"), token, null);
                 }
             }
         } catch (Exception e) {

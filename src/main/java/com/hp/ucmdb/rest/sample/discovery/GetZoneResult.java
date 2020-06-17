@@ -80,9 +80,8 @@ public class GetZoneResult {
             try {
                 finished = true;
                 for(; total > count + start;){
-                    String c = rootURL + "discovery/triggers?start=" + start + "&count=" + bulkSize
-                            + "&sortField=ciLabel&orderByAsc=true&filter=mzoneIds"+ URLEncoder.encode("=[" + zonename + "]","UTF-8");
-                    response = RestApiConnectionUtils.doGet( c, token );
+                    response = RestApiConnectionUtils.doGet(rootURL + "discovery/triggers" + "?start=" + start
+                            + "&count=" + bulkSize + "&sortField=ciLabel&orderByAsc=true&" + "filter=mzoneIds" + URLEncoder.encode("=[" + zonename + "]", "UTF-8"), token);
                     ObjectMapper objectMapper = new ObjectMapper();
                     JsonNode triggers = objectMapper.readTree(response);
                     total = triggers.get("total").asInt();
@@ -102,24 +101,20 @@ public class GetZoneResult {
 
         // get zone result and print
         try {
-            response = RestApiConnectionUtils.doGet(rootURL + "discovery/results?zoneId=" + zonename + "&ciType=ip_address&start=0&count=100", token );
+            response = RestApiConnectionUtils.doGet(rootURL + "discovery/results/statistics?mzoneId=" + zonename , token );
             ObjectMapper objectMapper = new ObjectMapper();
             JsonNode node = objectMapper.readTree(response);
-            int total = node.get("total").asInt();
-            int count = node.get("count").asInt();
-            if(total > count){
-                System.out.println("Total CI number: " + total + ". Print the top " + count);
+            for(JsonNode item : node){
+                System.out.println(item);
             }
-            for(int i = 0 ; i < node.get("resultColumnDataList").size(); i++){
-                StringBuilder output = new StringBuilder();
-                JsonNode item = node.get("resultColumnDataList").get(i);
-                output.append("Item " + i + 1 + ":");
-                for(JsonNode attr : item.get("apiDiscoveryResultDataList")){
-                    output.append(attr.get("attributeName").asText() + "=" + attr.get("attributeValue").asText() + ",");
-                }
-                output.deleteCharAt(output.length() - 1);
-                System.out.println(output.toString());
-            }
+
+            String classType = node.get(0).get("ciType").asText();
+            int count = node.get(0).get("count").asInt();
+
+            response = RestApiConnectionUtils.doGet(rootURL + "discovery/results?zoneId=" + zonename + "&citype=" + classType , token );
+            System.out.println(response);
+
+
         } catch (Exception e) {
             e.printStackTrace();
             System.exit(0);

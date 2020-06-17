@@ -46,6 +46,20 @@ public class CreateInventoryZoneForWindowsProbe {
     }
 
     private void execute(String token) {
+        // check if new UI backend enabled
+        String response = "";
+        try {
+            response = RestApiConnectionUtils.doGet(rootURL + "infrasetting?name=appilog.collectors.enableZoneBasedDiscovery", token );
+            ObjectMapper objectMapper = new ObjectMapper();
+            JsonNode node = objectMapper.readTree(response);
+            if(!"true".equals(node.get("value").asText())){
+                System.out.println("New Discovery backend is not enabled.");
+                System.exit(0);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            System.exit(0);
+        }
 
         int count = 1;
         String content = PayloadUtils.loadContent(this.getClass().getSimpleName(), count);
@@ -54,6 +68,7 @@ public class CreateInventoryZoneForWindowsProbe {
         String credentialId = "";
         try {
             credentialId = RestApiConnectionUtils.doPost(rootURL + "dataflowmanagement/credentials", token, content );
+            credentialId = credentialId.substring(1,credentialId.length() - 1);
         } catch (Exception e) {
             e.printStackTrace();
         }

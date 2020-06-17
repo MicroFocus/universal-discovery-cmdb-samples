@@ -80,8 +80,8 @@ public class RerunFailedTriggers {
         int bulkSize = 500;
         try {
             for(; total > count + start;){
-                response = RestApiConnectionUtils.doGet( rootURL + "discovery/triggers?start=" + start + "&count=" + bulkSize
-                        + "&sortField=ciLabel&orderByAsc=true&filter=mzoneIds"+ URLEncoder.encode("=[" + zonename + "]","UTF-8"), token );
+                response = RestApiConnectionUtils.doGet(rootURL + "discovery/triggers" + "?start=" + start
+                        + "&count=" + bulkSize + "&sortField=ciLabel&orderByAsc=true&" + "filter=mzoneIds" + URLEncoder.encode("=[" + zonename + "]", "UTF-8"), token);
                 ObjectMapper objectMapper = new ObjectMapper();
                 JsonNode triggers = objectMapper.readTree(response);
                 total = triggers.get("total").asInt();
@@ -94,7 +94,6 @@ public class RerunFailedTriggers {
                         ((ObjectNode)o.get("triggerItems").get(0)).put("jobId", item.get("jobId"));
                         ((ObjectNode)o.get("triggerItems").get(0)).put("mzoneId", item.get("mzoneId"));
                         ((ObjectNode)o.get("triggerItems").get(0)).put("triggerCiId", item.get("triggerCiId"));
-                        ((ObjectNode)o.get("triggerItems").get(0)).put("jobId", item.get("triggerCiType"));
 
                         RestApiConnectionUtils.doPatch(rootURL + "discovery/triggers", token, o.toString() );
                     }
