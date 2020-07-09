@@ -15,33 +15,32 @@ public class CreateInventoryZoneForWindowsProbe {
         this.rootURL = rootURL;
     }
     public static void main(String[] args) {
-        if(args.length < 5 ){
-            System.out.println("Parameters: hostname username password probelogin probepassword");
+        if(args.length < 3){
+            System.out.println("Parameters: hostname username password");
             System.exit(0);
         }
 
         String hostname = args[0];
         String username = args[1];
         String password = args[2];
-        String probeLogin = args[3];
-        String probePassword = args[4];
         String port = "8443";
+
+        String rootURL = RestApiConnectionUtils.buildRootUrl(hostname, port,false);
 
         // authenticate
         String token = null;
         try {
-            token = RestApiConnectionUtils.loginServer(hostname, username, password);
+            token = RestApiConnectionUtils.loginServer(rootURL, username, password);
         } catch (IOException e) {
             e.printStackTrace();
         }
         if(token == null || token.length() == 0){
             System.out.println("Can not log in to the UCMDB server. Check your serverIp, userName or password!");
-            System.exit(0);;
+            System.exit(0);
         }
-        System.out.println(token);
 
         // start the task
-        CreateInventoryZoneForWindowsProbe task = new CreateInventoryZoneForWindowsProbe("https://" + hostname + ":" + port + "/rest-api/");
+        CreateInventoryZoneForWindowsProbe task = new CreateInventoryZoneForWindowsProbe(rootURL);
         task.execute(token);
     }
 
@@ -61,10 +60,35 @@ public class CreateInventoryZoneForWindowsProbe {
             System.exit(0);
         }
 
-        int count = 1;
+        int count = -1;
+        // create IP range
         String content = PayloadUtils.loadContent(this.getClass().getSimpleName(), count);
         count ++;
+        try {
+            ObjectMapper objectMapper = new ObjectMapper();
+            JsonNode o = objectMapper.readValue(content, JsonNode.class);
+            ((ObjectNode)o.get(0)).put("range", "127.0.0.1-127.0.0.3");
+            RestApiConnectionUtils.doPost(rootURL + "dataflowmanagement/probes/DataFlowProbe/ranges", token, o.toString() );
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        // create IP range group
+        content = PayloadUtils.loadContent(this.getClass().getSimpleName(), count);
+        count ++;
+        try {
+            ObjectMapper objectMapper = new ObjectMapper();
+            JsonNode o = objectMapper.readValue(content, JsonNode.class);
+            ((ObjectNode)o.get("ranges").get(0).get("ipRanges").get(0)).put("start", "127.0.0.1");
+            ((ObjectNode)o.get("ranges").get(0).get("ipRanges").get(0)).put("end", "127.0.0.2");
+            RestApiConnectionUtils.doPatch(rootURL + "discovery/iprangeprofiles", token, o.toString());
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
         // create NTCMD credential
+        content = PayloadUtils.loadContent(this.getClass().getSimpleName(), count);
+        count ++;
         String credentialId = "";
         try {
             credentialId = RestApiConnectionUtils.doPost(rootURL + "dataflowmanagement/credentials", token, content );
@@ -86,11 +110,20 @@ public class CreateInventoryZoneForWindowsProbe {
         }
 
 
-        // create Inventory discovery profile
+        // create Inventory discovery group
         content = PayloadUtils.loadContent(this.getClass().getSimpleName(), count);
         count ++;
         try {
             RestApiConnectionUtils.doPost(rootURL + "discovery/discoveryprofiles", token, content);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        // create Inventory discovery schedule
+        content = PayloadUtils.loadContent(this.getClass().getSimpleName(), count);
+        count ++;
+        try {
+            RestApiConnectionUtils.doPost(rootURL + "discovery/scheduleprofiles", token, content);
         } catch (Exception e) {
             e.printStackTrace();
         }

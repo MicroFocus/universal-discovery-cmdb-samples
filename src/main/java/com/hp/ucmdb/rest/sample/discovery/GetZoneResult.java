@@ -26,10 +26,12 @@ public class GetZoneResult {
         String zonename = args[3];
         String port = "8443";
 
+        String rootURL = RestApiConnectionUtils.buildRootUrl(hostname, port,false);
+
         // authenticate
         String token = null;
         try {
-            token = RestApiConnectionUtils.loginServer(hostname, username, password);
+            token = RestApiConnectionUtils.loginServer(rootURL, username, password);
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -41,7 +43,7 @@ public class GetZoneResult {
         System.out.println(token);
 
         // start the task
-        GetZoneResult task = new GetZoneResult("https://" + hostname + ":" + port + "/rest-api/");
+        GetZoneResult task = new GetZoneResult(rootURL);
         task.execute(token, zonename);
     }
 
@@ -96,7 +98,6 @@ public class GetZoneResult {
             } catch (Exception e) {
                 e.printStackTrace();
             }
-
         }
 
         // get zone result and print

@@ -25,10 +25,12 @@ public class CreateQuickRunZone {
         String password = args[2];
         String port = "8443";
 
+        String rootURL = RestApiConnectionUtils.buildRootUrl(hostname, port,false);
+
         // authenticate
         String token = null;
         try {
-            token = RestApiConnectionUtils.loginServer(hostname, username, password);
+            token = RestApiConnectionUtils.loginServer(rootURL, username, password);
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -39,7 +41,7 @@ public class CreateQuickRunZone {
         System.out.println(token);
 
         // start the task
-        CreateQuickRunZone task = new CreateQuickRunZone("https://" + hostname + ":" + port + "/rest-api/");
+        CreateQuickRunZone task = new CreateQuickRunZone(rootURL);
         task.execute(token);
     }
 

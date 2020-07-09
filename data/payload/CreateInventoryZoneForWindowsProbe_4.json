@@ -1,16 +1,11 @@
 {
-  "name": "ProbeInventoryZone",
-  "activated": false,
-  "ipRangeProfiles": [
-    {
-      "ipRangeProfileId": "All IP Range Groups"
-    }
-  ],
-  "discoveryActivities": [
-    {
-      "discoveryProfileId": "ProbeInventoryJobgroup",
-      "scheduleProfileId": "Interval 1 Day (Default)",
-      "credentialProfileId": "ProbeInventoryCredentialProfile"
-    }
-  ]
+  "name": "ProbeInventorySchedule",
+  "generateFrom": "Interval",
+  "scheduleDetail": {
+    "intervalUnit": "day",
+    "interval": "1"
+  },
+  "runDuringTimeRange": {
+    "type": "always"
+  }
 }

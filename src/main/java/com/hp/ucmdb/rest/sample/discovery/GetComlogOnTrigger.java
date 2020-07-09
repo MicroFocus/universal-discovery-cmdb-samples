@@ -28,10 +28,12 @@ public class GetComlogOnTrigger {
         String zonename = args[3];
         String port = "8443";
 
+        String rootURL = RestApiConnectionUtils.buildRootUrl(hostname, port,false);
+
         // authenticate
         String token = null;
         try {
-            token = RestApiConnectionUtils.loginServer(hostname, username, password);
+            token = RestApiConnectionUtils.loginServer(rootURL, username, password);
         } catch (
                 IOException e) {
             e.printStackTrace();
@@ -44,7 +46,7 @@ public class GetComlogOnTrigger {
         System.out.println(token);
 
         // start the task
-        GetComlogOnTrigger task = new GetComlogOnTrigger("https://" + hostname + ":" + port + "/rest-api/");
+        GetComlogOnTrigger task = new GetComlogOnTrigger(rootURL);
         task.execute(token, zonename);
     }
 
@@ -65,14 +67,12 @@ public class GetComlogOnTrigger {
             System.exit(0);
         }
 
-
         // run the zone
         try {
             RestApiConnectionUtils.doPatch(rootURL + "discovery/managementzones/" + zonename + "?operation=activate", token, null);
         } catch (IOException e) {
             e.printStackTrace();
         }
-
 
         // Get the first trigger and return it with comlog
         int total = 1;
@@ -131,9 +131,9 @@ public class GetComlogOnTrigger {
 
         // get log
         try {
-            response = RestApiConnectionUtils.doPatch(rootURL + "discovery/triggers/" + triggerId + "/communicationlog?"
-                    + "probeName=" + probeName + "&zoneId=" + zonename + "&jobId=" + URLEncoder.encode(jobId, "UTF-8").replace("+", "%20"), token, null);
-            System.out.println(response);
+            response = RestApiConnectionUtils.doGet(rootURL + "discovery/triggers/" + triggerId + "/communicationlog?"
+                    + "probeName=" + probeName + "&zoneId=" + zonename + "&jobId=" + URLEncoder.encode(jobId, "UTF-8").replace("+", "%20"), token);
+            System.out.println("communicationlog is " + response);
         } catch (Exception e) {
             e.printStackTrace();
         }

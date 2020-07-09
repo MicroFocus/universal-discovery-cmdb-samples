@@ -7,7 +7,7 @@
 				"SqsQueuePrefixForDiscovery": "universal-discovery"
 			}
 		}, {
-			"jobName": "AWS by Web Services",
+			"jobName": "AWS by Web Services"
 		}
 	]
 }

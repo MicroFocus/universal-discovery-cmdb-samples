@@ -9,110 +9,124 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.*;
 /*
-     This scenario is to perform a simple troubleshooting when there is an sample error.
+     This scenario is to perform a simple troubleshooting when there is a sample error.
  */
 public class SimpleTroubleshootingScenarioSample {
-    //the parameters user need to input are (serverIp, userName, password, integrationPoint_name, job_name, job_category)
+    //the parameters user need to input are (serverIp, userName, password, integrationPointName, jobName, jobCategory)
     public static void main(String[] args) throws Exception {
 
-        //get token for authentication
-        String serverIp = "127.0.0.1";//**********input************
-        String userName = "";//************input**********
-        String password = "";//************input**********
-        String token = RestApiConnectionUtils.loginServer(serverIp, userName, password);
+        if(args.length < 6 ){
+            System.out.println("Parameters: hostname username password integrationPointName jobName jobCategoryName");
+            System.exit(0);
+        }
+
+        String hostname = args[0];
+        String username = args[1];
+        String password = args[2];
+        String integrationPointName = args[3];
+        String jobName = args[4];
+        String jobCategoryName = args[5];
+        String port = "8443";
+
+        String rootURL = RestApiConnectionUtils.buildRootUrl(hostname, port,false);
+
+        String token = RestApiConnectionUtils.loginServer(rootURL, username, password);
         if(token == null || token.length() == 0){
             System.out.println("Can not log in to the UCMDB server. Check your serverIp, userName or password!");
             return;
         }
         System.out.println(token);
 
-        String integrationPoint_name = "sun";//***********input***********
-
         //test connection with an sample point /*it takes around 40s if the connection is failed*/
-        String result = IntegrationCommonConnectionUtils.testConnectionWithIntegration(token, serverIp, integrationPoint_name);
-        System.out.println("the result of test connection is: " + result);
+        String result = IntegrationCommonConnectionUtils.testConnectionWithIntegration(token, rootURL, integrationPointName);
+
         if(result != null){
             boolean isConnected = false;
             JSONObject resultJson = new JSONObject(result);
-            if(resultJson!=null){//test connection successful, the result contain the key-value {"connectionStatus": true}
+            //test connection successful, the result contain the key-value {"connectionStatus": true}
+            if(resultJson!=null){
                 if(resultJson.has("connectionStatus")) isConnected = resultJson.getBoolean("connectionStatus");
             }
             if(!isConnected){
-                System.out.println("Can not connect to the sample point(" + integrationPoint_name + ")");
+                System.out.println("Can not connect to the sample point(" + integrationPointName + ")");
                 return;
             }
         }
 
         //inactive the sample point
-        String integrationPointString = IntegrationCommonConnectionUtils.getSingleIntegrationPoint(token, serverIp, integrationPoint_name);
+        String integrationPointString = IntegrationCommonConnectionUtils.getSingleIntegrationPoint(token, rootURL, integrationPointName);
         JSONObject integrationPoint = new JSONObject(integrationPointString);
         System.out.println("The details of the sample point are " + integrationPoint);
         if(integrationPoint != null && integrationPoint.has("enabled") && integrationPoint.getBoolean("enabled")){
-            String inactive_result = IntegrationCommonConnectionUtils.activateOrDeactivateIntegrationPoint(token, serverIp, integrationPoint_name, false);
-            if(inactive_result.indexOf("200") == -1){// failed to inactive
+            String inactive_result = IntegrationCommonConnectionUtils.activateOrDeactivateIntegrationPoint(token, rootURL, integrationPointName, false);
+            if(inactive_result.indexOf("200") == -1){
                 System.out.println("Failed to inactivate the sample point");
             }
             System.out.println("the result of the inactive sample point is: " + inactive_result);
 
             //waiting for the inactivating process is over
-            if(!waitingProcessEnd(3, token, serverIp, integrationPoint_name, null, 0, true)){
+            if(!waitingProcessEnd(3, token, rootURL, integrationPointName, null, 0, true)){
                 System.out.println("Can not get the inactivation status!");
                 return;
             }
 
             //activate the sample point
-            String active_result = IntegrationCommonConnectionUtils.activateOrDeactivateIntegrationPoint(token, serverIp, integrationPoint_name, true);
+            String active_result = IntegrationCommonConnectionUtils.activateOrDeactivateIntegrationPoint(token, rootURL, integrationPointName, true);
             if(active_result.indexOf("200") == -1){// failed to active
                 System.out.println("Failed to activate the sample point");
             }
             System.out.println("the result of active sample point is: " + active_result);
 
             //waiting for the activating process is over
-            if(!waitingProcessEnd(3, token, serverIp, integrationPoint_name, null, 0, false)){
+            if(!waitingProcessEnd(3, token, rootURL, integrationPointName, null, 0, false)){
                 System.out.println("Can not get the activation status!");
                 return;
             }
         }
 
-        String job_name = "push2";//***********input***********
-        int job_category = 2;//**********input************ (1 is 'POPULATION' and 2 is 'PUSH')
 
-        //sync job
-        int sync_type = 1; //***********input*********** (1 is "FULL" and 2 is "DELTA")
+        //(1 is 'POPULATION' and 2 is 'PUSH')
+        int jobCategory = 2;
+        if ("POPULATION".equals(jobCategoryName)) {
+            jobCategory = 1;
+        }
+
+        //(1 is "FULL" and 2 is "DELTA")
+        int syncType = 1;
         /* there are four values for sync job: PUSH_FULL / PUSH_DELTA / POPULATION_FULL / POPULATION_DELTA*/
-        String operation_type = job_category == 1 ? "POPULATION" : "PUSH";
-        operation_type = sync_type == 1 ? operation_type+"_"+"FULL" : operation_type+"_"+"DELTA";
-        System.out.println("syncing...");//it may take several seconds
-        String syncResult = IntegrationCommonConnectionUtils.syncJob(token, serverIp, integrationPoint_name, job_name, operation_type);
-        System.out.println("the result of sync job is: " + syncResult);
+        String operationType = jobCategory == 1 ? "POPULATION" : "PUSH";
+        operationType = syncType == 1 ? operationType+"_"+"FULL" : operationType+"_"+"DELTA";
+        System.out.println("Syncing...");
+        String syncResult = IntegrationCommonConnectionUtils.syncJob(token, rootURL, integrationPointName, jobName, operationType);
+        System.out.println("The result of sync job is: " + syncResult);
 
         //waiting for the syncing process is done
-        if(!waitingProcessEnd(3, token, serverIp, integrationPoint_name, job_name, job_category, false)){
+        if(!waitingProcessEnd(3, token, rootURL, integrationPointName, jobName, jobCategory, false)){
             System.out.println("Can not get the sync job status!");
             return;
         }
 
         //check the query status
-        String queryStatus = getQueryStatus(token, serverIp, integrationPoint_name, job_name, job_category);
-        System.out.println("the query status is " + queryStatus);
+        String queryStatus = getQueryStatus(token, rootURL, integrationPointName, jobName, jobCategory);
+        System.out.println("The query status is " + queryStatus);
         System.out.println("Done!");
     }
 
     // get details of the single job
-    public static String getSingleJob(JSONObject integrationPointDetail, String job_name, int job_category) throws JSONException{
-        if(job_category == 1){//population
+    public static String getSingleJob(JSONObject integrationPointDetail, String jobName, int jobCategory) throws JSONException{
+        if(jobCategory == 1){//population
             JSONArray populationJobList = integrationPointDetail.getJSONArray("dataPopulationJobs");
             for(int i = 0; i < populationJobList.length(); i++){
                 JSONObject tmp_population = populationJobList.getJSONObject(i);
-                if(job_name.equals(tmp_population.getString("displayID"))){
+                if(jobName.equals(tmp_population.getString("displayID"))){
                     return tmp_population.toString();
                 }
             }
-        }else if(job_category == 2){//push
+        }else if(jobCategory == 2){//push
             JSONArray pushJobList = integrationPointDetail.getJSONArray("dataPushJobs");
             for(int i = 0; i < pushJobList.length(); i++){
                 JSONObject tmp_push = pushJobList.getJSONObject(i);
-                if(job_name.equals(tmp_push.getString("displayID"))){
+                if(jobName.equals(tmp_push.getString("displayID"))){
                     return tmp_push.toString();
                 }
             }
@@ -121,17 +135,17 @@ public class SimpleTroubleshootingScenarioSample {
     }
 
     //waiting for the activating process or syncing process (interval in seconds)
-    private static boolean waitingProcessEnd(int intervalSeconds, String token, String serverIP, String integrationPoint_name, String job_name, int job_category, boolean isInactive)throws JSONException,IOException, InterruptedException{
+    private static boolean waitingProcessEnd(int intervalSeconds, String token, String rootURL, String integrationPointName, String jobName, int jobCategory, boolean isInactive)throws JSONException,IOException, InterruptedException{
         boolean loop = false;
         int count = 0;
         while (!loop){
             try{
                 Thread.sleep(intervalSeconds*1000);
                 count++;
-                String printInfo = job_name == null ? "sample name is " + integrationPoint_name : "sample name is " + integrationPoint_name +" and job name is " + job_name;
+                String printInfo = jobName == null ? "sample name is " + integrationPointName : "sample name is " + integrationPointName +" and job name is " + jobName;
                 System.out.println("Checking with times " + count + " ..." + "     (" + printInfo + ")");
 
-                String status = job_name == null ? getIntegrationPointActiveStatus(token, serverIP, integrationPoint_name) : getJobStatus(token, serverIP, integrationPoint_name, job_name, job_category);
+                String status = jobName == null ? getIntegrationPointActiveStatus(token, rootURL, integrationPointName) : getJobStatus(token, rootURL, integrationPointName, jobName, jobCategory);
                 System.out.println("The status is " + status);
                 if(status == null){
                     System.out.println("Check the server connection!");
@@ -139,7 +153,7 @@ public class SimpleTroubleshootingScenarioSample {
                 }
 
 
-                if(job_name != null){//judge the sync status
+                if(jobName != null){//judge the sync status
                     if( status.indexOf("SUCCESS") != -1 || status.indexOf("SUCESS") != -1 ){
                         System.out.println("Checking over with successful!");
                         loop = true;
@@ -170,9 +184,9 @@ public class SimpleTroubleshootingScenarioSample {
     }
 
     //get the sample point activation status
-    private static String getIntegrationPointActiveStatus(String token, String serverIP, String integrationPoint_name)throws IOException, JSONException{
+    private static String getIntegrationPointActiveStatus(String token, String rootURL, String integrationPointName)throws IOException, JSONException{
         //get the special sample point
-        String integrationPointDetail = IntegrationCommonConnectionUtils.getSingleIntegrationPoint(token,serverIP,integrationPoint_name);
+        String integrationPointDetail = IntegrationCommonConnectionUtils.getSingleIntegrationPoint(token,rootURL,integrationPointName);
 
         //get special job in one sample point
         JSONObject integrationJson = new JSONObject(integrationPointDetail);
@@ -182,15 +196,15 @@ public class SimpleTroubleshootingScenarioSample {
 
 
     //get the running job's status
-    private static String getJobStatus(String token, String serverIP, String integrationPoint_name, String job_name, int job_category)throws IOException, JSONException{
+    private static String getJobStatus(String token, String rootURL, String integrationPointName, String jobName, int jobCategory)throws IOException, JSONException{
         //get the
-        String integrationPointDetail = IntegrationCommonConnectionUtils.getSingleIntegrationPoint(token, serverIP, integrationPoint_name);
+        String integrationPointDetail = IntegrationCommonConnectionUtils.getSingleIntegrationPoint(token, rootURL, integrationPointName);
         if(integrationPointDetail != null){
             String status = null;
-            if(job_category == 1)
-                status = getPopulationJobStatus(new JSONObject(integrationPointDetail), job_name);
-            if(job_category == 2)
-                status = getPushJobStatus(new JSONObject(integrationPointDetail), job_name);
+            if(jobCategory == 1)
+                status = getPopulationJobStatus(new JSONObject(integrationPointDetail), jobName);
+            if(jobCategory == 2)
+                status = getPushJobStatus(new JSONObject(integrationPointDetail), jobName);
             if(status == null){
                 System.out.println("Failed to get the job status!");
                 return null;
@@ -200,12 +214,12 @@ public class SimpleTroubleshootingScenarioSample {
         return null;
     }
 
-    private static String getPopulationJobStatus(JSONObject integrationDetail, String job_name)throws JSONException{
+    private static String getPopulationJobStatus(JSONObject integrationDetail, String jobName)throws JSONException{
         if(integrationDetail != null && integrationDetail.has("dataPopulationJobs")){
             JSONArray populationJobList = integrationDetail.getJSONArray("dataPopulationJobs");
             for(int i = 0; i < populationJobList.length(); i++){
                 JSONObject tmp = populationJobList.getJSONObject(i);
-                if(tmp.getString("displayID").equals(job_name)){
+                if(tmp.getString("displayID").equals(jobName)){
                     JSONObject statusJson = tmp.getJSONObject("jobStatistics");
                     return statusJson.getString("jobStatus");
                 }
@@ -214,12 +228,12 @@ public class SimpleTroubleshootingScenarioSample {
         return null;
     }
 
-    private static String getPushJobStatus(JSONObject integrationDetail, String job_name)throws JSONException{
+    private static String getPushJobStatus(JSONObject integrationDetail, String jobName)throws JSONException{
         if(integrationDetail != null && integrationDetail.has("dataPushJobs")){
             JSONArray pushJobList = integrationDetail.getJSONArray("dataPushJobs");
             for (int i = 0; i < pushJobList.length(); i++) {
                 JSONObject tmp = pushJobList.getJSONObject(i);
-                if(tmp.getString("displayID").equals(job_name)){
+                if(tmp.getString("displayID").equals(jobName)){
                     String status = "UNKNOWN";
                     boolean enabled = integrationDetail.getBoolean("enabled");
                     if(!enabled){//disabled
@@ -241,31 +255,31 @@ public class SimpleTroubleshootingScenarioSample {
     }
 
     //get the result of query status
-    private static String getQueryStatus(String token, String serverIP, String integrationPoint_name, String job_name, int job_category)throws IOException, JSONException{
+    private static String getQueryStatus(String token, String rootURL, String integrationPointName, String jobName, int jobCategory)throws IOException, JSONException{
         //get the sample point
-        String integrationPointDetail = IntegrationCommonConnectionUtils.getSingleIntegrationPoint(token,serverIP,integrationPoint_name);
+        String integrationPointDetail = IntegrationCommonConnectionUtils.getSingleIntegrationPoint(token,rootURL,integrationPointName);
         System.out.println("the sample point detail is " + integrationPointDetail);
 
         //get details of a specific job in a specific sample point
         JSONObject integrationJson = new JSONObject(integrationPointDetail);
-        String jobDetail = getSingleJob(integrationJson, job_name, job_category);
+        String jobDetail = getSingleJob(integrationJson, jobName, jobCategory);
         if(jobDetail == null){
             System.out.println("Error getting the job!");
 
         }
-        System.out.println("the job(" + job_name + ") detail  is " + jobDetail);
-        return parseJob(new JSONObject(jobDetail), job_category);
+        System.out.println("the job(" + jobName + ") detail  is " + jobDetail);
+        return parseJob(new JSONObject(jobDetail), jobCategory);
     }
 
     // parse the job structure to get the query status
-    private static String parseJob(JSONObject jobDetail, int job_category)throws JSONException{
+    private static String parseJob(JSONObject jobDetail, int jobCategory)throws JSONException{
         if(jobDetail != null){
             //get population jobs
-            if(job_category == 1){
+            if(jobCategory == 1){
                 return jobDetail.getJSONObject("jobStatistics").getJSONObject("queryStatus").toString();
             }
             //get push jobs
-            if(job_category == 2){
+            if(jobCategory == 2){
                 JSONObject jobRunHistory = jobDetail.getJSONArray("jobRunHistory").getJSONObject(0);
                 JSONArray queryArray = jobRunHistory.getJSONArray("queryRunHistory");
                 List<JSONObject> queryResult = new ArrayList<>();

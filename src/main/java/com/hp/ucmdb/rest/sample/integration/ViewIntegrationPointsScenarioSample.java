@@ -9,14 +9,23 @@ import java.util.*;
      Then you can view the job list and status of each job.
  */
 public class ViewIntegrationPointsScenarioSample {
-    //the parameters you need to provide are: serverIp, userName, password and integrationPoint_name
+    //the parameters you need to provide are: serverIp, userName, password and integrationPointName
     public static void main(String[] args) throws Exception {
 
-        //get token for authentication
-        String serverIp = "127.0.0.1";//**********input************
-        String userName = "";//************input**********
-        String password = "";//************input**********
-        String token = RestApiConnectionUtils.loginServer(serverIp, userName, password);
+        if(args.length < 3 ){
+            System.out.println("Parameters: hostname username password integrationPointName");
+            System.exit(0);
+        }
+
+        String hostname = args[0];
+        String username = args[1];
+        String password = args[2];
+        String integrationPointName = args[3];
+        String port = "8443";
+
+        String rootURL = RestApiConnectionUtils.buildRootUrl(hostname, port,false);
+
+        String token = RestApiConnectionUtils.loginServer(rootURL, username, password);
         if(token == null || token.length() == 0){
             System.out.println("Can not log in to the UCMDB server. Check your serverIp, userName or password!");
             return;
@@ -24,18 +33,16 @@ public class ViewIntegrationPointsScenarioSample {
         System.out.println(token);
 
         //get details of all sample points
-        JSONObject allIntegrationPoints = new JSONObject(IntegrationCommonConnectionUtils.getAllIntegrationPoints(token, serverIp));
+        JSONObject allIntegrationPoints = new JSONObject(IntegrationCommonConnectionUtils.getAllIntegrationPoints(token, rootURL));
         if(allIntegrationPoints == null){
             System.out.println("Can not get details of all sample points!");
             return;
         }
-        System.out.println("sample points list is " + IntegrationCommonConnectionUtils.getAllIntegrationPointNames(allIntegrationPoints));
-
-        String integrationPoint_name = "test_sun";//***********input***********
-
+        System.out.println("Sample points list is " + IntegrationCommonConnectionUtils.getAllIntegrationPointNames(allIntegrationPoints));
+        
         //get a specific sample point
-        String integrationPointDetail = allIntegrationPoints.getJSONObject(integrationPoint_name).toString();
-        System.out.println( "Details of the sample point (" + integrationPoint_name + ") are: " + integrationPointDetail);
+        String integrationPointDetail = allIntegrationPoints.getJSONObject(integrationPointName).toString();
+        System.out.println( "Details of the sample point (" + integrationPointName + ") are: " + integrationPointDetail);
 
         //get job list of a specific sample point (including job status)
         List<String> allIntegrationPointNames = IntegrationCommonConnectionUtils.getAllIntegrationPointNames(allIntegrationPoints);

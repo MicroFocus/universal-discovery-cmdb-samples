@@ -26,7 +26,8 @@ public class RestApiConnectionUtils {
     public static final String MEDIA_ALL = "*/*";
 
     public static final String TCP_PROTOCOL = "https://";
-    public static final String URI_PREFIX = "/rest-api";
+    public static final String CONTAINER_CONTEXT = "/ucmdb-server";
+    public static final String URI_PREFIX = "/rest-api/";
     public static final String RETURNED_A_STATUS_CODE_OF = "Returned a status code of ";
     public static final String RESPONSE_RESULT = "Response Result: ";
 
@@ -46,17 +47,24 @@ public class RestApiConnectionUtils {
         public HttpDeleteWithBody() { super(); }
     }
 
-    public static String loginServer(String serverIP, String userName, String password)throws JSONException, IOException{
-        return loginServer(serverIP, userName, password, "8443");
+    public static String buildRootUrl(String serverIP) {
+        return buildRootUrl(serverIP, "8443", false);
     }
 
-    public static String loginServer(String serverIP, String userName, String password, String port)throws JSONException, IOException{
+    public static String buildRootUrl(String serverIP, String port) {
+        return buildRootUrl(serverIP, port, false);
+    }
+
+    public static String buildRootUrl(String serverIP, String port, boolean isContainerized) {
+        return TCP_PROTOCOL + serverIP + ":" + port + (isContainerized ? CONTAINER_CONTEXT : "") + URI_PREFIX;
+    }
+
+    public static String loginServer(String url, String userName, String password)throws JSONException, IOException{
         //HTTPS protocol, server IP and API type as the prefix of REST API URL.
-        if(serverIP == null || serverIP.length() == 0 || userName == null || userName.length() == 0 || password == null || password.length()== 0){
-            System.out.println("Please input correct serverIp or userName or password!");
+        if(url == null || url.length() == 0 || userName == null || userName.length() == 0 || password == null || password.length()== 0){
+            System.out.println("Please input correct url or userName or password!");
             return null;
         }
-        String domainURLAndApiType="https://" + serverIP + ":" + port + "/rest-api/";
 
         //adminUser has the sample access.
         JSONObject loginJson = new JSONObject();
@@ -65,16 +73,16 @@ public class RestApiConnectionUtils {
         loginJson.put("password",password);
 
         //Put username and password in HTTP request body and invoke REST API(rest-api/authenticate) with POST method to get token.
-        System.out.print("Login server request : ");
-        String result = doPost(domainURLAndApiType+"authenticate", null, loginJson.toString());
-        System.out.println("The response of login is " + result);
+        String result = doPost(url + "authenticate", null, loginJson.toString());
         if(result == null || result.length() == 0){
             System.out.println("Failed to connect with the UCMDB server!");
             return result;
         }
         String token = new JSONObject(result).getString("token");
 
-        if(token != null) System.out.println("Connect to server Successfully!");
+        if (token != null) {
+            System.out.println("Connect to server Successfully!");
+        }
         return token;
     }
 
@@ -176,15 +184,18 @@ public class RestApiConnectionUtils {
     public static HttpGet getGetRequest(String url, String token, String requestContentType, String responseType) {
         HttpGet httpGet = new HttpGet(url);
         setRequestHeader(token, requestContentType, responseType, httpGet);
+        System.out.println("Request is " + httpGet.getMethod() + ": " + httpGet.getURI());
         return httpGet;
     }
 
     public static HttpPatch getPatchRquest(String url, String token, String requestContentType, String responseType,
                                            String content) throws UnsupportedEncodingException {
-        HttpPatch httpGet = new HttpPatch(url);
-        setRequestHeader(token, requestContentType, responseType, httpGet);
-        setRequestContent(content, httpGet);
-        return httpGet;
+        HttpPatch httpPatch = new HttpPatch(url);
+        setRequestHeader(token, requestContentType, responseType, httpPatch);
+        setRequestContent(content, httpPatch);
+        System.out.println("Request is " + httpPatch.getMethod() + ": " + httpPatch.getURI());
+        System.out.println("Request body is " + content);
+        return httpPatch;
     }
 
     public static HttpPost getPostRequest(String url, String token, String requestContentType, String responseType,
@@ -192,6 +203,8 @@ public class RestApiConnectionUtils {
         HttpPost httpPost = new HttpPost(url);
         setRequestHeader(token, requestContentType, responseType, httpPost);
         setRequestContent(content, httpPost);
+        System.out.println("Request is " + httpPost.getMethod() + ": " + httpPost.getURI());
+        System.out.println("Request body is " + content);
         return httpPost;
     }
 
@@ -202,12 +215,15 @@ public class RestApiConnectionUtils {
         if(content != null){
             setRequestContent(content, httpDelete);
         }
+        System.out.println("Request is " + httpDelete.getMethod() + ": " + httpDelete.getURI());
+        System.out.println("Request body is " + content);
         return httpDelete;
     }
 
     public static HttpDelete getDeleteRequest(String url, String token, String requestContentType, String responseType){
         HttpDelete httpDelete = new HttpDelete(url);
         setRequestHeader(token, requestContentType, responseType, httpDelete);
+        System.out.println("Request is " + httpDelete.getMethod() + ": " + httpDelete.getURI());
         return httpDelete;
     }
 
@@ -293,6 +309,7 @@ public class RestApiConnectionUtils {
             httpResponse = sendRequest(request);
             result = EntityUtils.toString(httpResponse.getEntity());
             System.out.println("Returned a status code of " + printStatusCode(httpResponse.getStatusLine().getStatusCode()));
+            System.out.println("Response body is " + result);
         } catch (Exception e) {
             e.printStackTrace();
             System.exit(-1);

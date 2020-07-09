@@ -26,21 +26,22 @@ public class CreateAWSZone {
         String password = args[2];
         String port = "8443";
 
+        String rootURL = RestApiConnectionUtils.buildRootUrl(hostname, port,false);
+
         // authenticate
         String token = null;
         try {
-            token = RestApiConnectionUtils.loginServer(hostname, username, password);
+            token = RestApiConnectionUtils.loginServer(rootURL, username, password);
         } catch (IOException e) {
             e.printStackTrace();
         }
         if(token == null || token.length() == 0){
             System.out.println("Can not log in to the UCMDB server. Check your serverIp, userName or password!");
-            System.exit(0);;
+            System.exit(0);
         }
-        System.out.println(token);
 
         // start the task
-        CreateAWSZone task = new CreateAWSZone("https://" + hostname + ":" + port + "/rest-api/");
+        CreateAWSZone task = new CreateAWSZone(rootURL);
         task.execute(token);
     }
 
@@ -49,7 +50,7 @@ public class CreateAWSZone {
         // check if new UI backend enabled
         String response = "";
         try {
-            response = RestApiConnectionUtils.doGet(rootURL + "infrasetting?name=appilog.collectors.enableZoneBasedDiscovery", token );
+            response = RestApiConnectionUtils.doGet(rootURL + "infrasetting?name=appilog.collectors.enableZoneBasedDiscovery", token);
             ObjectMapper objectMapper = new ObjectMapper();
             JsonNode node = objectMapper.readTree(response);
             if(!"true".equals(node.get("value").asText())){

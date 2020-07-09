@@ -28,22 +28,23 @@ public class RerunFailedTriggers {
         String zonename = args[3];
         String port = "8443";
 
+        String rootURL = RestApiConnectionUtils.buildRootUrl(hostname, port,false);
+
         // authenticate
         String token = null;
         try {
-            token = RestApiConnectionUtils.loginServer(hostname, username, password);
+            token = RestApiConnectionUtils.loginServer(rootURL, username, password);
         } catch (IOException e) {
             e.printStackTrace();
         }
         if (token == null || token.length() == 0) {
             System.out.println("Can not log in to the UCMDB server. Check your serverIp, userName or password!");
             System.exit(0);
-            ;
         }
         System.out.println(token);
 
         // start the task
-        RerunFailedTriggers task = new RerunFailedTriggers("https://" + hostname + ":" + port + "/rest-api/");
+        RerunFailedTriggers task = new RerunFailedTriggers(rootURL);
         task.execute(token, zonename);
     }
 

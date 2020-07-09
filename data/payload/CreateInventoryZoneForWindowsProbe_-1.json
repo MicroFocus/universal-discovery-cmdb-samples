@@ -1,0 +1,10 @@
+[
+  {
+    "ipVersion": "IPV4",
+    "definitionType": "IP_RANGE",
+    "range": "16.187.188.130-16.187.188.130",
+    "rangeType": "DATA_CENTER",
+    "isIncluded": true,
+    "description": ""
+  }
+]
