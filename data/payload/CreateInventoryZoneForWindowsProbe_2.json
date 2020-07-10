@@ -1,11 +1,23 @@
 {
-	"name": "ProbeInventoryCredentialProfile",
-	"oob": false,
-	"credentials": [{
-			"domain": "DefaultDomain",
-			"protocols": {
-				"ntadminprotocol": ["42_1_CMS"]
-			}
-		}
-	]
+  "operation": "add",
+  "groups": [
+    "ProbeInventoryIpRangeGroup"
+  ],
+  "ranges": [
+    {
+      "probeName": "DataFlowProbe",
+      "domainName": "DefaultDomain",
+      "clusterName": "",
+      "ipRanges": [
+        {
+          "start": "127.0.0.0",
+          "end": "127.0.0.0",
+          "cidrMask": 0,
+          "ipType": "IPV4",
+          "rangeCategory": "DATA_CENTER",
+          "excludeIpRanges": null
+        }
+      ]
+    }
+  ]
 }

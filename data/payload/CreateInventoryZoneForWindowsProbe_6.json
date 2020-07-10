@@ -1,0 +1,11 @@
+{
+  "name": "ProbeInventorySchedule",
+  "generateFrom": "Interval",
+  "scheduleDetail": {
+    "intervalUnit": "day",
+    "interval": "1"
+  },
+  "runDuringTimeRange": {
+    "type": "always"
+  }
+}

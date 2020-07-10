@@ -1,11 +1,11 @@
 {
-  "name": "ProbeInventorySchedule",
-  "generateFrom": "Interval",
-  "scheduleDetail": {
-    "intervalUnit": "day",
-    "interval": "1"
-  },
-  "runDuringTimeRange": {
-    "type": "always"
-  }
+	"name": "ProbeInventoryCredentialProfile",
+	"oob": false,
+	"credentials": [{
+			"domain": "DefaultDomain",
+			"protocols": {
+				"ntadminprotocol": ["42_1_CMS"]
+			}
+		}
+	]
 }

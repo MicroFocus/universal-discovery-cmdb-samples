@@ -1,11 +1,6 @@
 {
-	"name": "ProbeInventoryJobgroup",
-	"jobs": [{
-			"jobName": "Range IPs by ICMP"
-		}, {
-			"jobName": "Host Resources and Applications by Shell"
-		}, {
-			"jobName": "Host Connection by Shell"
-		}
-	]
+	"protocol_username": "administrator",
+	"protocol_password": "iso*help",
+	"domainName": "DefaultDomain",
+	"credentialType": "ntadminprotocol"
 }

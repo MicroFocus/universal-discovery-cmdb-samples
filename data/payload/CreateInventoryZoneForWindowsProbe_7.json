@@ -1,0 +1,16 @@
+{
+  "name": "ProbeInventoryZone",
+  "activated": false,
+  "ipRangeProfiles": [
+    {
+      "ipRangeProfileId": "ProbeInventoryIpRangeGroup"
+    }
+  ],
+  "discoveryActivities": [
+    {
+      "discoveryProfileId": "ProbeInventoryJobgroup",
+      "scheduleProfileId": "ProbeInventorySchedule",
+      "credentialProfileId": "ProbeInventoryCredentialProfile"
+    }
+  ]
+}
