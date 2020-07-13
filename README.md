@@ -5,7 +5,7 @@
 - [Background](#background)
 - [Install](#install)
 - [Usage](#usage)
-	- [Quick Start](#quick start)
+	- [Quick Start](#quick-start)
 	- [Discovery](#discovery)
 	- [Integration](#integration)
 
