@@ -14,128 +14,78 @@ public class CreateInventoryZoneForWindowsProbe {
     public CreateInventoryZoneForWindowsProbe(String rootURL) {
         this.rootURL = rootURL;
     }
-    public static void main(String[] args) {
-        if(args.length < 3){
-            System.out.println("Parameters: hostname username password");
+    public static void main(String[] args) throws Exception {
+        if(args.length < 4){
+            System.out.println("Parameters: hostname port username password");
             System.exit(0);
         }
 
         String hostname = args[0];
-        String username = args[1];
-        String password = args[2];
-        String port = "8443";
+        String port = args[1];
+        String username = args[2];
+        String password = args[3];
 
         String rootURL = RestApiConnectionUtils.buildRootUrl(hostname, port,false);
 
         // authenticate
-        String token = null;
-        try {
-            token = RestApiConnectionUtils.loginServer(rootURL, username, password);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        if(token == null || token.length() == 0){
-            System.out.println("Can not log in to the UCMDB server. Check your serverIp, userName or password!");
-            System.exit(0);
-        }
+        String token = RestApiConnectionUtils.loginServer(rootURL, username, password);
 
         // start the task
         CreateInventoryZoneForWindowsProbe task = new CreateInventoryZoneForWindowsProbe(rootURL);
         task.execute(token);
     }
 
-    private void execute(String token) {
+    private void execute(String token) throws Exception {
         // check if new UI backend enabled
-        String response = "";
-        try {
-            response = RestApiConnectionUtils.doGet(rootURL + "infrasetting?name=appilog.collectors.enableZoneBasedDiscovery", token );
-            ObjectMapper objectMapper = new ObjectMapper();
-            JsonNode node = objectMapper.readTree(response);
-            if(!"true".equals(node.get("value").asText())){
-                System.out.println("New Discovery backend is not enabled.");
-                System.exit(0);
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
-            System.exit(0);
-        }
+        RestApiConnectionUtils.ensureZoneBasedDiscoveryIsEnabled(rootURL, token);
 
         int count = 1;
         // create IP range
         String content = PayloadUtils.loadContent(this.getClass().getSimpleName(), count);
         count ++;
-        try {
-            ObjectMapper objectMapper = new ObjectMapper();
-            JsonNode o = objectMapper.readValue(content, JsonNode.class);
-            ((ObjectNode)o.get(0)).put("range", "127.0.0.1-127.0.0.3");
-            RestApiConnectionUtils.doPost(rootURL + "dataflowmanagement/probes/DataFlowProbe/ranges", token, o.toString() );
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+        ObjectMapper objectMapper = new ObjectMapper();
+        JsonNode o = objectMapper.readValue(content, JsonNode.class);
+        RestApiConnectionUtils.doPost(rootURL + "dataflowmanagement/probes/DataFlowProbe/ranges", token, o.toString(), "CREATE IP RANGE.");
 
         // create IP range group
         content = PayloadUtils.loadContent(this.getClass().getSimpleName(), count);
         count ++;
-        try {
-            ObjectMapper objectMapper = new ObjectMapper();
-            JsonNode o = objectMapper.readValue(content, JsonNode.class);
-            ((ObjectNode)o.get("ranges").get(0).get("ipRanges").get(0)).put("start", "127.0.0.1");
-            ((ObjectNode)o.get("ranges").get(0).get("ipRanges").get(0)).put("end", "127.0.0.2");
-            RestApiConnectionUtils.doPatch(rootURL + "discovery/iprangeprofiles", token, o.toString());
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+        objectMapper = new ObjectMapper();
+        o = objectMapper.readValue(content, JsonNode.class);
+        RestApiConnectionUtils.doPatch(rootURL + "discovery/iprangeprofiles", token, o.toString(), "CREATE IP RANGE PROFILE.");
 
         // create NTCMD credential
         content = PayloadUtils.loadContent(this.getClass().getSimpleName(), count);
         count ++;
-        String credentialId = "";
-        try {
-            credentialId = RestApiConnectionUtils.doPost(rootURL + "dataflowmanagement/credentials", token, content );
-            credentialId = credentialId.substring(1,credentialId.length() - 1);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+        String credentialId = RestApiConnectionUtils.doPost(rootURL + "dataflowmanagement/credentials", token, content, "CREATE NTCMD CREADENTIAL.");
+        credentialId = credentialId.substring(1,credentialId.length() - 1);
 
-        // create Inventory credential profile
+        // create Inventory credential group
         content = PayloadUtils.loadContent(this.getClass().getSimpleName(), count);
         count ++;
-        try {
-            ObjectMapper objectMapper = new ObjectMapper();
-            JsonNode o = objectMapper.readValue(content, JsonNode.class);
-            ((ObjectNode)o.get("credentials").get(0).get("protocols")).putArray("ntadminprotocol").add(credentialId);
-            RestApiConnectionUtils.doPost(rootURL + "discovery/credentialprofiles", token, o.toString() );
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+        objectMapper = new ObjectMapper();
+        o = objectMapper.readValue(content, JsonNode.class);
+        ((ObjectNode)o.get("credentials").get(0).get("protocols")).putArray("ntadminprotocol").add(credentialId);
+        RestApiConnectionUtils.doPost(rootURL + "discovery/credentialprofiles", token, o.toString(), "CREATE CREADENTIAL GROUP.");
 
 
-        // create Inventory discovery group
+        // create Inventory job group
         content = PayloadUtils.loadContent(this.getClass().getSimpleName(), count);
         count ++;
-        try {
-            RestApiConnectionUtils.doPost(rootURL + "discovery/discoveryprofiles", token, content);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+        RestApiConnectionUtils.doPost(rootURL + "discovery/discoveryprofiles", token, content, "CREATE JOB GROUP.");
 
         // create Inventory discovery schedule
         content = PayloadUtils.loadContent(this.getClass().getSimpleName(), count);
         count ++;
-        try {
-            RestApiConnectionUtils.doPost(rootURL + "discovery/scheduleprofiles", token, content);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+        RestApiConnectionUtils.doPost(rootURL + "discovery/scheduleprofiles", token, content, "CREATE SCHEDULE.");
 
         // create the zone
         content = PayloadUtils.loadContent(this.getClass().getSimpleName(), count);
         count ++;
-        try {
-            RestApiConnectionUtils.doPost(rootURL + "discovery/managementzones", token, content);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+        RestApiConnectionUtils.doPost(rootURL + "discovery/managementzones", token, content, "CREATE ZONE.");
+
+        // run the zone
+        RestApiConnectionUtils.doPatch(rootURL + "discovery/managementzones/ProbeInventoryZone?operation=activate", token, null, "RUN THE ZONE.");
 
     }
 }

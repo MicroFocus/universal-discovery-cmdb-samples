@@ -13,7 +13,7 @@ public class GetZoneResultTest {
 
     @Test
     public void testMain() throws Exception {
-        GetZoneResult.main(new String[]{"16.187.188.130","admin","Admin_1234", "myzone"});
+        GetZoneResult.main(new String[]{"127.0.0.1","8443","admin","admin", "ProbeInventoryZone"});
     }
 
 } 

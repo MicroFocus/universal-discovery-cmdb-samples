@@ -15,16 +15,17 @@ import java.io.IOException;
 public class LogInToUCMDB {
 
     public static void main(String[] args) {
-        if(args.length < 3){
-            System.out.println("Parameters: hostname username password");
+        if(args.length < 4){
+            System.out.println("Parameters: hostname port username password");
             System.exit(0);
         }
 
         String hostname = args[0];
-        String username = args[1];
-        String password = args[2];
+        String port = args[1];
+        String username = args[2];
+        String password = args[3];
 
-        String rootURL = RestApiConnectionUtils.buildRootUrl(hostname, "8443",  false);
+        String rootURL = RestApiConnectionUtils.buildRootUrl(hostname, port,  false);
 
         // authenticate
         String token = null;

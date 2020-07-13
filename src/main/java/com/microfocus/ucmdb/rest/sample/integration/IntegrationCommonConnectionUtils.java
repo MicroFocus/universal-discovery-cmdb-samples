@@ -14,8 +14,7 @@ import java.util.List;
 public class IntegrationCommonConnectionUtils {
 
     public static String getAllIntegrationPoints(String token, String rootURL)throws IOException {
-        System.out.println("Getting all sample points request.");
-        String allIntegrationPoints = RestApiConnectionUtils.doGet(rootURL + "integration/integrationpoints", token);
+        String allIntegrationPoints = RestApiConnectionUtils.doGet(rootURL + "integration/integrationpoints", token, "Getting all sample points request.");
         return allIntegrationPoints;
     }
 
@@ -32,28 +31,28 @@ public class IntegrationCommonConnectionUtils {
     }
 
     public static String getSingleIntegrationPoint(String token, String rootURL, String integrationPoint_name)throws IOException{
-        System.out.println("Getting the " + integrationPoint_name + " sample point request.");
-        return RestApiConnectionUtils.doGet(rootURL + "integration/integrationpoints/" + integrationPoint_name + "?detail=false", token);
+        return RestApiConnectionUtils.doGet(rootURL + "integration/integrationpoints/" + integrationPoint_name + "?detail=false",
+                token, "Getting the " + integrationPoint_name + " sample point request.");
     }
 
     public static String activateOrDeactivateIntegrationPoint(String token, String rootURL, String integrationPoint_name, boolean enabled)throws IOException, JSONException, NoSuchAlgorithmException, KeyManagementException {
         String enableString = enabled ? "true" : "false";
         String activate = enabled ? "activate" : "deactivate";
-        System.out.println( activate + " sample point request.");
-        return RestApiConnectionUtils.doPatch(rootURL + "integration/integrationpoints/"+ integrationPoint_name + "?enabled=" + enableString, token, null);
+        return RestApiConnectionUtils.doPatch(rootURL + "integration/integrationpoints/"+ integrationPoint_name + "?enabled=" + enableString,
+                token, null, activate + " sample point request.");
     }
 
     public static String syncJob(String token, String rootURL, String integrationPoint_name, String job_name, String operation_type)throws IOException,JSONException,NoSuchAlgorithmException,KeyManagementException{
         JSONObject syncJson = new JSONObject();
         //there are four values for the operation_type parameter: PUSH_FULL / PUSH_DELTA / POPULATION_FULL / POPULATION_DELTA */
         syncJson.put("operationType",operation_type);
-        System.out.println("Sync job request.");
-        return RestApiConnectionUtils.doPatch(rootURL + "integration/integrationpoints/" + integrationPoint_name + "/jobs/" + job_name + "?operationtype=" + operation_type, token, null);
+        return RestApiConnectionUtils.doPatch(rootURL + "integration/integrationpoints/" + integrationPoint_name + "/jobs/" + job_name + "?operationtype=" + operation_type,
+                token, null, "Sync job request.");
     }
 
     public static String testConnectionWithIntegration(String token, String rootURL, String integrationPoint_name)throws IOException{
-        System.out.println("Test connection with sample point request.");
-        return RestApiConnectionUtils.doGet(rootURL + "integration/integrationpoints/" + integrationPoint_name + "/connectionstatus", token);
+        return RestApiConnectionUtils.doGet(rootURL + "integration/integrationpoints/" + integrationPoint_name + "/connectionstatus",
+                token, "Test connection with sample point request.");
     }
 
 }

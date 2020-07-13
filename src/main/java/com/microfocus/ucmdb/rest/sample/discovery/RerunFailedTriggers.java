@@ -16,63 +16,68 @@ public class RerunFailedTriggers {
         this.rootURL = rootURL;
     }
 
-    public static void main(String[] args) {
-        if (args.length < 4) {
-            System.out.println("Parameters: hostname username password zonename");
+    public static void main(String[] args) throws Exception {
+        if (args.length < 5) {
+            System.out.println("Parameters: hostname port username password zonename");
             System.exit(0);
         }
 
         String hostname = args[0];
-        String username = args[1];
-        String password = args[2];
-        String zonename = args[3];
-        String port = "8443";
+        String port = args[1];
+        String username = args[2];
+        String password = args[3];
+        String zonename = args[4];
 
         String rootURL = RestApiConnectionUtils.buildRootUrl(hostname, port,false);
 
         // authenticate
-        String token = null;
-        try {
-            token = RestApiConnectionUtils.loginServer(rootURL, username, password);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        if (token == null || token.length() == 0) {
-            System.out.println("Can not log in to the UCMDB server. Check your serverIp, userName or password!");
-            System.exit(0);
-        }
-        System.out.println(token);
+        String token = RestApiConnectionUtils.loginServer(rootURL, username, password);
 
         // start the task
         RerunFailedTriggers task = new RerunFailedTriggers(rootURL);
         task.execute(token, zonename);
     }
 
-    private void execute(String token, String zonename) {
-        String response = "";
-        int fileCount = 1;
+    private void execute(String token, String zonename) throws Exception {
+
         // check if new UI backend enabled
-        try {
-            response = RestApiConnectionUtils.doGet(rootURL + "infrasetting?name=appilog.collectors.enableZoneBasedDiscovery", token );
-            ObjectMapper objectMapper = new ObjectMapper();
-            JsonNode node = objectMapper.readTree(response);
-            if(!"true".equals(node.get("value").asText())){
-                System.out.println("New Discovery backend is not enabled.");
-                System.exit(0);
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
-            System.exit(0);
-        }
+        RestApiConnectionUtils.ensureZoneBasedDiscoveryIsEnabled(rootURL, token);
 
-
+        String response = null;
+        int fileCount = 1;
         // run the zone
-        try {
-            RestApiConnectionUtils.doPatch(rootURL + "discovery/managementzones/" + zonename + "?operation=activate", token, null );
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+        RestApiConnectionUtils.doPatch(rootURL + "discovery/managementzones/" + zonename + "?operation=activate",
+                token, null, "ACTIVATE THE ZONE.");
 
+        // check zone status until finish
+        boolean finished = false;
+        while(!finished){
+            Thread.sleep(5000);
+            int total = 1;
+            int count = 0;
+            int start = 0;
+            int bulkSize = 500;
+            finished = true;
+            for(; total > count + start;){
+                response = RestApiConnectionUtils.doGet(rootURL + "discovery/triggers" + "?start=" + start
+                                + "&count=" + bulkSize + "&sortField=ciLabel&orderByAsc=true&" + "filter=mzoneIds" + URLEncoder.encode("=[" + zonename + "]", "UTF-8"),
+                        token, "CHECK IF ZONE DISCOVERY FINISHED.");
+                ObjectMapper objectMapper = new ObjectMapper();
+                JsonNode triggers = objectMapper.readTree(response);
+                total = triggers.get("total").asInt();
+                count = triggers.get("count").asInt();
+                start = triggers.get("start").asInt();
+                if (0 == triggers.get("items").size()) {
+                    finished = false;
+                } else {
+                    for(JsonNode item : triggers.get("items")){
+                        if(!("SUCCESS".equals(item.get("status").asText()) || "ERROR".equals(item.get("status").asText()) || "WARNING".equals(item.get("status").asText()))){
+                            finished = false;
+                        }
+                    }
+                }
+            }
+        }
 
         // check zone triggers and return failed
         int total = 1;
@@ -82,7 +87,8 @@ public class RerunFailedTriggers {
         try {
             for(; total > count + start;){
                 response = RestApiConnectionUtils.doGet(rootURL + "discovery/triggers" + "?start=" + start
-                        + "&count=" + bulkSize + "&sortField=ciLabel&orderByAsc=true&" + "filter=mzoneIds" + URLEncoder.encode("=[" + zonename + "]", "UTF-8"), token);
+                        + "&count=" + bulkSize + "&sortField=ciLabel&orderByAsc=true&" + "filter=mzoneIds" + URLEncoder.encode("=[" + zonename + "]", "UTF-8"),
+                        token, "GET TRIGGERS OF ZONE.");
                 ObjectMapper objectMapper = new ObjectMapper();
                 JsonNode triggers = objectMapper.readTree(response);
                 total = triggers.get("total").asInt();
@@ -96,7 +102,7 @@ public class RerunFailedTriggers {
                         ((ObjectNode)o.get("triggerItems").get(0)).put("mzoneId", item.get("mzoneId"));
                         ((ObjectNode)o.get("triggerItems").get(0)).put("triggerCiId", item.get("triggerCiId"));
 
-                        RestApiConnectionUtils.doPatch(rootURL + "discovery/triggers", token, o.toString() );
+                        RestApiConnectionUtils.doPatch(rootURL + "discovery/triggers", token, o.toString(), "RERUN FAILED TRIGGERS.");
                     }
                 }
             }
@@ -104,8 +110,5 @@ public class RerunFailedTriggers {
         } catch (Exception e) {
             e.printStackTrace();
         }
-
-
-
     }
 }

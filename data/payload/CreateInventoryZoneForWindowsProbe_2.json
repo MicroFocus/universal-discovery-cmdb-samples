@@ -10,8 +10,8 @@
       "clusterName": "",
       "ipRanges": [
         {
-          "start": "127.0.0.0",
-          "end": "127.0.0.0",
+          "start": "127.0.0.1",
+          "end": "127.0.0.1",
           "cidrMask": 0,
           "ipType": "IPV4",
           "rangeCategory": "DATA_CENTER",

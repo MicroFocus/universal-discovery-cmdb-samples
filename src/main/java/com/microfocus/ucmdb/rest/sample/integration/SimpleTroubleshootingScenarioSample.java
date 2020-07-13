@@ -15,27 +15,23 @@ public class SimpleTroubleshootingScenarioSample {
     //the parameters user need to input are (serverIp, userName, password, integrationPointName, jobName, jobCategory)
     public static void main(String[] args) throws Exception {
 
-        if(args.length < 6 ){
-            System.out.println("Parameters: hostname username password integrationPointName jobName jobCategoryName");
+        if(args.length < 7){
+            System.out.println("Parameters: hostname port username password integrationPointName jobName jobCategoryName");
             System.exit(0);
         }
 
         String hostname = args[0];
-        String username = args[1];
-        String password = args[2];
-        String integrationPointName = args[3];
-        String jobName = args[4];
-        String jobCategoryName = args[5];
-        String port = "8443";
+        String port = args[1];
+        String username = args[2];
+        String password = args[3];
+        String integrationPointName = args[4];
+        String jobName = args[5];
+        String jobCategoryName = args[6];
 
         String rootURL = RestApiConnectionUtils.buildRootUrl(hostname, port,false);
 
+        // authenticate
         String token = RestApiConnectionUtils.loginServer(rootURL, username, password);
-        if(token == null || token.length() == 0){
-            System.out.println("Can not log in to the UCMDB server. Check your serverIp, userName or password!");
-            return;
-        }
-        System.out.println(token);
 
         //test connection with an sample point /*it takes around 40s if the connection is failed*/
         String result = IntegrationCommonConnectionUtils.testConnectionWithIntegration(token, rootURL, integrationPointName);
@@ -58,27 +54,27 @@ public class SimpleTroubleshootingScenarioSample {
         JSONObject integrationPoint = new JSONObject(integrationPointString);
         System.out.println("The details of the sample point are " + integrationPoint);
         if(integrationPoint != null && integrationPoint.has("enabled") && integrationPoint.getBoolean("enabled")){
-            String inactive_result = IntegrationCommonConnectionUtils.activateOrDeactivateIntegrationPoint(token, rootURL, integrationPointName, false);
-            if(inactive_result.indexOf("200") == -1){
+            String inactiveResult = IntegrationCommonConnectionUtils.activateOrDeactivateIntegrationPoint(token, rootURL, integrationPointName, false);
+            if(inactiveResult.indexOf("200") == -1){
                 System.out.println("Failed to inactivate the sample point");
             }
-            System.out.println("the result of the inactive sample point is: " + inactive_result);
+            System.out.println("the result of the inactive sample point is: " + inactiveResult);
 
             //waiting for the inactivating process is over
-            if(!waitingProcessEnd(3, token, rootURL, integrationPointName, null, 0, true)){
+            if(!waitingProcessEnd(15, token, rootURL, integrationPointName, null, 0, true)){
                 System.out.println("Can not get the inactivation status!");
                 return;
             }
 
             //activate the sample point
-            String active_result = IntegrationCommonConnectionUtils.activateOrDeactivateIntegrationPoint(token, rootURL, integrationPointName, true);
-            if(active_result.indexOf("200") == -1){// failed to active
+            String activeResult = IntegrationCommonConnectionUtils.activateOrDeactivateIntegrationPoint(token, rootURL, integrationPointName, true);
+            if(activeResult.indexOf("200") == -1){// failed to active
                 System.out.println("Failed to activate the sample point");
             }
-            System.out.println("the result of active sample point is: " + active_result);
+            System.out.println("the result of active sample point is: " + activeResult);
 
             //waiting for the activating process is over
-            if(!waitingProcessEnd(3, token, rootURL, integrationPointName, null, 0, false)){
+            if(!waitingProcessEnd(15, token, rootURL, integrationPointName, null, 0, false)){
                 System.out.println("Can not get the activation status!");
                 return;
             }
@@ -101,7 +97,7 @@ public class SimpleTroubleshootingScenarioSample {
         System.out.println("The result of sync job is: " + syncResult);
 
         //waiting for the syncing process is done
-        if(!waitingProcessEnd(3, token, rootURL, integrationPointName, jobName, jobCategory, false)){
+        if(!waitingProcessEnd(15, token, rootURL, integrationPointName, jobName, jobCategory, false)){
             System.out.println("Can not get the sync job status!");
             return;
         }

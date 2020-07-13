@@ -12,25 +12,21 @@ public class ViewIntegrationPointsScenarioSample {
     //the parameters you need to provide are: serverIp, userName, password and integrationPointName
     public static void main(String[] args) throws Exception {
 
-        if(args.length < 3 ){
-            System.out.println("Parameters: hostname username password integrationPointName");
+        if(args.length < 4){
+            System.out.println("Parameters: hostname port username password integrationPointName");
             System.exit(0);
         }
 
         String hostname = args[0];
-        String username = args[1];
-        String password = args[2];
-        String integrationPointName = args[3];
-        String port = "8443";
+        String port = args[1];
+        String username = args[2];
+        String password = args[3];
+        String integrationPointName = args[4];
 
         String rootURL = RestApiConnectionUtils.buildRootUrl(hostname, port,false);
 
+        // authenticate
         String token = RestApiConnectionUtils.loginServer(rootURL, username, password);
-        if(token == null || token.length() == 0){
-            System.out.println("Can not log in to the UCMDB server. Check your serverIp, userName or password!");
-            return;
-        }
-        System.out.println(token);
 
         //get details of all sample points
         JSONObject allIntegrationPoints = new JSONObject(IntegrationCommonConnectionUtils.getAllIntegrationPoints(token, rootURL));

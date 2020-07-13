@@ -13,7 +13,8 @@ public class SimpleTroubleshootingScenarioSampleTest {
 
     @Test
     public void testMain() throws Exception {
-        SimpleTroubleshootingScenarioSample.main(new String[]{"16.187.188.130","admin","Admin_1234", "test", "push1", "PUSH"});
+        SimpleTroubleshootingScenarioSample.main(new String[]{"127.0.0.1","8443","admin","admin", "integrationPoint", "pushJob", "PUSH"});
+        SimpleTroubleshootingScenarioSample.main(new String[]{"127.0.0.1","8443","admin","admin", "integrationPoint", "populationJob", "POPULATION"});
     }
 
 } 

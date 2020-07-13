@@ -13,7 +13,7 @@ public class RerunFailedTriggersTest {
 
     @Test
     public void testMain() throws Exception {
-        RerunFailedTriggers.main(new String[]{"16.187.188.130","admin","Admin_1234", "myzone"});
+        RerunFailedTriggers.main(new String[]{"127.0.0.1","8443","admin","admin", "ProbeInventoryZone"});
     } 
 
 } 

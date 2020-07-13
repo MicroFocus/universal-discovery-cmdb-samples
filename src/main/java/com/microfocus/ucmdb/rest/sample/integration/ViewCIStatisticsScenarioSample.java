@@ -10,26 +10,23 @@ import org.json.JSONObject;
 public class ViewCIStatisticsScenarioSample {
     //the parameters you need to provide are: serverIp, userName, password, integrationPointName, jobName and jobCategory
     public static void main(String[] args) throws Exception {
-        if(args.length < 6 ){
-            System.out.println("Parameters: hostname username password integrationPointName jobName jobCategoryName");
+        if(args.length < 7){
+            System.out.println("Parameters: hostname port username password integrationPointName jobName jobCategoryName");
             System.exit(0);
         }
 
         String hostname = args[0];
-        String username = args[1];
-        String password = args[2];
-        String integrationPointName = args[3];
-        String jobName = args[4];
-        String jobCategoryName = args[5];
-        String port = "8443";
+        String port = args[1];
+        String username = args[2];
+        String password = args[3];
+        String integrationPointName = args[4];
+        String jobName = args[5];
+        String jobCategoryName = args[6];
 
         String rootURL = RestApiConnectionUtils.buildRootUrl(hostname, port,false);
 
+        // authenticate
         String token = RestApiConnectionUtils.loginServer(rootURL, username, password);
-        if(token == null || token.length() == 0){
-            System.out.println("Can not log in to the UCMDB server. Check your serverIp, userName or password!");
-            return;
-        }
 
         //get a specific sample point
         String integrationPointDetail = IntegrationCommonConnectionUtils.getSingleIntegrationPoint(token,rootURL,integrationPointName);

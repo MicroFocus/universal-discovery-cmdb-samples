@@ -15,23 +15,20 @@ import java.util.*;
 public class JobSyncScenarioSample {
     public static void main(String[] args) throws Exception {
 
-        if(args.length < 3 ){
-            System.out.println("Parameters: hostname username password");
+        if(args.length < 4){
+            System.out.println("Parameters: hostname port username password");
             System.exit(0);
         }
 
         String hostname = args[0];
-        String username = args[1];
-        String password = args[2];
-        String port = "8443";
+        String port = args[1];
+        String username = args[2];
+        String password = args[3];
 
         String rootURL = RestApiConnectionUtils.buildRootUrl(hostname, port,false);
 
+        // authenticate
         String token = RestApiConnectionUtils.loginServer(rootURL, username, password);
-        if(token == null || token.length() == 0){
-            System.out.println("Can not log in to the UCMDB server. Check your serverIp, userName or password!");
-            return;
-        }
 
         //get details of all sample points
         String getResult = IntegrationCommonConnectionUtils.getAllIntegrationPoints(token, rootURL);
@@ -96,7 +93,7 @@ public class JobSyncScenarioSample {
         boolean tag = false;
         if(result != null && result.indexOf("200") != -1){
         // waiting for the activating process done
-            tag = waitingProcessEnd(3, token, rootURL, integrationPointName, null, 0);
+            tag = waitingProcessEnd(15, token, rootURL, integrationPointName, null, 0);
         }
         if (!tag){
             System.out.println("Failed to activate the " + integrationPointName + " sample point.");
@@ -121,7 +118,7 @@ public class JobSyncScenarioSample {
                 System.out.println("the request of population " + syncType + " sync is " + result);
 
                 //waiting for the syncing process done
-                if(!waitingProcessEnd(3, token, rootURL, integrationPointName, jobName, 1)){
+                if(!waitingProcessEnd(15, token, rootURL, integrationPointName, jobName, 1)){
                     System.out.println("Can not get the sync job status! The job name is (" + jobName + ") and sample name is (" + integrationPointName + ")");
                     continue;
                 }
@@ -135,7 +132,7 @@ public class JobSyncScenarioSample {
                 System.out.println("the result of push " + syncType + " sync is " + result);
 
                 //waiting for the syncing process done
-                if(!waitingProcessEnd(3, token, rootURL, integrationPointName, jobName, 2)){
+                if(!waitingProcessEnd(15, token, rootURL, integrationPointName, jobName, 2)){
                     System.out.println("Can not get the sync job status! The job name is (" + jobName + ") and sample name is (" + integrationPointName + ")");
                     continue;
                 }
@@ -168,7 +165,7 @@ public class JobSyncScenarioSample {
                     loop = true;
                     break;
                 }
-                if(count >= 20){
+                if(count >= 60){
                     System.out.println("Checking status failed. You have exceeded the maximum attempts allowed.");
                     break;
                 }

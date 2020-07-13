@@ -14,95 +14,58 @@ public class CreateAWSZone {
     public CreateAWSZone(String rootURL) {
         this.rootURL = rootURL;
     }
-    public static void main(String[] args) {
-        if(args.length < 3 ){
-            System.out.println("Parameters: hostname username password");
+    public static void main(String[] args) throws Exception {
+        if(args.length < 4 ){
+            System.out.println("Parameters: hostname port username password");
             System.exit(0);
         }
 
         String hostname = args[0];
-        String username = args[1];
-        String password = args[2];
-        String port = "8443";
+        String port = args[1];
+        String username = args[2];
+        String password = args[3];
 
         String rootURL = RestApiConnectionUtils.buildRootUrl(hostname, port,false);
 
         // authenticate
-        String token = null;
-        try {
-            token = RestApiConnectionUtils.loginServer(rootURL, username, password);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        if(token == null || token.length() == 0){
-            System.out.println("Can not log in to the UCMDB server. Check your serverIp, userName or password!");
-            System.exit(0);
-        }
+        String token = RestApiConnectionUtils.loginServer(rootURL, username, password);
+
 
         // start the task
         CreateAWSZone task = new CreateAWSZone(rootURL);
         task.execute(token);
     }
 
-    private void execute(String token) {
+    private void execute(String token) throws Exception {
 
         // check if new UI backend enabled
-        String response = "";
-        try {
-            response = RestApiConnectionUtils.doGet(rootURL + "infrasetting?name=appilog.collectors.enableZoneBasedDiscovery", token);
-            ObjectMapper objectMapper = new ObjectMapper();
-            JsonNode node = objectMapper.readTree(response);
-            if(!"true".equals(node.get("value").asText())){
-                System.out.println("New Discovery backend is not enabled.");
-                System.exit(0);
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
-            System.exit(0);
-        }
+        RestApiConnectionUtils.ensureZoneBasedDiscoveryIsEnabled(rootURL, token);
 
         int count = 1;
         String content = PayloadUtils.loadContent(this.getClass().getSimpleName(), count);
         count ++;
         // create AWS credential
-        String credentialId = "";
-        try {
-            credentialId = RestApiConnectionUtils.doPost(rootURL + "dataflowmanagement/credentials", token, content );
-            credentialId = credentialId.substring(1,credentialId.length() - 1);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+        String credentialId = RestApiConnectionUtils.doPost(rootURL + "dataflowmanagement/credentials", token, content, "CREATE AWS CREDENTIAL.");
+        credentialId = credentialId.substring(1,credentialId.length() - 1);
 
-        // create AWS credential profile
+        // create AWS credential group
         content = PayloadUtils.loadContent(this.getClass().getSimpleName(), count);
         count ++;
-        try {
-            ObjectMapper objectMapper = new ObjectMapper();
-            JsonNode o = objectMapper.readValue(content, JsonNode.class);
-            ((ObjectNode)o.get("credentials").get(0).get("protocols")).putArray("awsprotocol").add(credentialId);
-            RestApiConnectionUtils.doPost(rootURL + "discovery/credentialprofiles", token, o.toString() );
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+        ObjectMapper objectMapper = new ObjectMapper();
+        JsonNode o = objectMapper.readValue(content, JsonNode.class);
+        ((ObjectNode)o.get("credentials").get(0).get("protocols")).putArray("awsprotocol").add(credentialId);
+        RestApiConnectionUtils.doPost(rootURL + "discovery/credentialprofiles", token, o.toString(), "CREATE AWS CREDENTAIL GROUP.");
 
 
-        // create AWS discovery profile
+        // create AWS job group.
         content = PayloadUtils.loadContent(this.getClass().getSimpleName(), count);
         count ++;
-        try {
-            RestApiConnectionUtils.doPost(rootURL + "discovery/discoveryprofiles", token, content);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+        RestApiConnectionUtils.doPost(rootURL + "discovery/discoveryprofiles", token, content, "CREATE AWS JOB GROUP.");
 
         // create the zone
         content = PayloadUtils.loadContent(this.getClass().getSimpleName(), count);
         count ++;
-        try {
-            RestApiConnectionUtils.doPost(rootURL + "discovery/managementzones", token, content);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+        RestApiConnectionUtils.doPost(rootURL + "discovery/managementzones", token, content, "CREATE AWS ZONE.");
 
     }
 }

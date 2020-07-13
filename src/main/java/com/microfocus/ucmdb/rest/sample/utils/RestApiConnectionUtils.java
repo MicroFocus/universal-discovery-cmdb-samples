@@ -1,4 +1,6 @@
 package com.microfocus.ucmdb.rest.sample.utils;
+import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import org.apache.http.HttpEntity;
 import org.apache.http.client.methods.*;
 import org.apache.http.conn.ssl.SSLConnectionSocketFactory;
@@ -30,6 +32,7 @@ public class RestApiConnectionUtils {
     public static final String URI_PREFIX = "/rest-api/";
     public static final String RETURNED_A_STATUS_CODE_OF = "Returned a status code of ";
     public static final String RESPONSE_RESULT = "Response Result: ";
+    public static final String SPLITER = "==============================================================";
 
     static class HttpDeleteWithBody extends HttpEntityEnclosingRequestBase {
         public static final String METHOD_NAME = "DELETE";
@@ -59,7 +62,7 @@ public class RestApiConnectionUtils {
         return TCP_PROTOCOL + serverIP + ":" + port + (isContainerized ? CONTAINER_CONTEXT : "") + URI_PREFIX;
     }
 
-    public static String loginServer(String url, String userName, String password)throws JSONException, IOException{
+    public static String loginServer(String url, String userName, String password) throws IOException {
         //HTTPS protocol, server IP and API type as the prefix of REST API URL.
         if(url == null || url.length() == 0 || userName == null || userName.length() == 0 || password == null || password.length()== 0){
             System.out.println("Please input correct url or userName or password!");
@@ -73,12 +76,17 @@ public class RestApiConnectionUtils {
         loginJson.put("password",password);
 
         //Put username and password in HTTP request body and invoke REST API(rest-api/authenticate) with POST method to get token.
-        String result = doPost(url + "authenticate", null, loginJson.toString());
+        String result = doPost(url + "authenticate", null, loginJson.toString(), "LOG IN TO SERVER.");
         if(result == null || result.length() == 0){
             System.out.println("Failed to connect with the UCMDB server!");
             return result;
         }
         String token = new JSONObject(result).getString("token");
+
+        if(token == null || token.length() == 0){
+            System.out.println("Can not log in to the UCMDB server. Check your serverIp, userName or password!");
+            System.exit(0);
+        }
 
         if (token != null) {
             System.out.println("Connect to server Successfully!");
@@ -86,25 +94,68 @@ public class RestApiConnectionUtils {
         return token;
     }
 
-    public static String doPost(String url, String token, String content)throws IOException {
+    public static String ensureZoneBasedDiscoveryIsEnabled(String rootURL, String token) {
+
+        String response = null;
+        try {
+            response = RestApiConnectionUtils.doGet(rootURL + "infrasetting?name=appilog.collectors.enableZoneBasedDiscovery", token, "ENSURE ZONE BASED DISCOVERY IS ENABLED.");
+            ObjectMapper objectMapper = new ObjectMapper();
+            JsonNode node = objectMapper.readTree(response);
+            if(!"true".equals(node.get("value").asText())){
+                System.out.println("New Discovery backend is not enabled.");
+                System.exit(0);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            System.exit(0);
+        }
+
+        return response;
+    }
+
+    public static String doPost(String url, String token, String content, String description) throws IOException {
+        System.out.println();
+        System.out.println(SPLITER);
+        System.out.println(description);
         HttpPost httpPost = getPostRequest(url, token, MEDIA_TYPE_JSON, MEDIA_TYPE_JSON, content);
-        return getResponseString(httpPost);
+        String result = getResponseString(httpPost);
+        System.out.println(SPLITER);
+        System.out.println();
+        return result;
     }
 
-    public static String doGet(String url, String token) {
+    public static String doGet(String url, String token, String description) {
+        System.out.println();
+        System.out.println(SPLITER);
+        System.out.println(description);
         HttpGet httpGet = getGetRequest(url, token, MEDIA_TYPE_JSON, MEDIA_TYPE_JSON);
-        return getResponseString(httpGet);
+        String result = getResponseString(httpGet);
+        System.out.println(SPLITER);
+        System.out.println();
+        return result;
     }
 
 
-    public static String doPatch(String url, String token, String content) throws IOException{
+    public static String doPatch(String url, String token, String content, String description) throws IOException{
+        System.out.println();
+        System.out.println(SPLITER);
+        System.out.println(description);
         HttpPatch patchRequest = getPatchRquest(url, token, MEDIA_TYPE_JSON, MEDIA_TYPE_JSON, content);
-        return getResponseString(patchRequest);
+        String result = getResponseString(patchRequest);
+        System.out.println(SPLITER);
+        System.out.println();
+        return result;
     }
 
-    public static String doDelete(String url, String token, String content) throws IOException {
+    public static String doDelete(String url, String token, String content, String description) throws IOException {
+        System.out.println();
+        System.out.println(SPLITER);
+        System.out.println(description);
         HttpDeleteWithBody httpDeleteWithBody = getDeleteRequest(url, token, MEDIA_TYPE_JSON, MEDIA_TYPE_JSON, content);
-        return getResponseString(httpDeleteWithBody);
+        String result = getResponseString(httpDeleteWithBody);
+        System.out.println(SPLITER);
+        System.out.println();
+        return result;
     }
 
     public static CloseableHttpResponse sendMultiPartRequest(HttpPost httpPost, String fileFullPath,
