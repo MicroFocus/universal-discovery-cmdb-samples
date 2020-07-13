@@ -106,9 +106,11 @@ First, we need to modify JUnit test: src\test\java\com\microfocus\ucmdb\rest\sam
 * Get communication log on trigger  
     In this case, we will re-run a trigger of zone, wait until it finishes, then retrieve communication log.
 First, we need to modify JUnit test: 
+  
   src\test\java\com\microfocus\ucmdb\rest\sample\discovery\GetComlogOnTriggerTest.java
-  update the IP of UCMDB, port, username, password and zone name.
-Then run this test:
+update the IP of UCMDB, port, username, password and zone name.
+  
+  Then run this test:
   
     ```sh
     mvn test -Dtest=com.microfocus.ucmdb.rest.sample.discovery.GetComlogOnTriggerTest
@@ -119,9 +121,11 @@ Then run this test:
 * Get zone result  
     In this case, we will activate a zone, then get the statistics and result of the zone.
 First, we need to modify JUnit test: 
+  
   src\test\java\com\microfocus\ucmdb\rest\sample\discovery\GetZoneResultTest.java
-  Then run this test:
 
+  Then run this test:
+  
     ```sh
     mvn test -Dtest=com.microfocus.ucmdb.rest.sample.discovery.GetZoneResultTest
     ```
@@ -131,9 +135,11 @@ First, we need to modify JUnit test:
 * Rerun failed triggers  
     In this case, we will activate a zone, then rerun the trigger if status is error. 
 First, we need to modify JUnit test: 
+  
   src\test\java\com\microfocus\ucmdb\rest\sample\discovery\RerunFailedTriggersTest.java
-  Then run this test:
 
+  Then run this test:
+  
     ```sh
     mvn test -Dtest=com.microfocus.ucmdb.rest.sample.discovery.RerunFailedTriggersTest
     ```
@@ -160,6 +166,7 @@ First, we need to modify JUnit test:
     First, we need to create an integration point with push and population jobs in it. But do not activate it immediately.
     Second, we need to modify JUnit test: 
     src\test\java\com\microfocus\ucmdb\rest\sample\integration\JobSyncScenarioSampleTest.java
+    
     Then run this test:
     
     ```sh
@@ -177,6 +184,8 @@ First, we need to modify JUnit test:
     
     update the IP of UCMDB, port, username, password, integration point, job and job category. 
     
+    Then run this test:
+    
     ```sh
     mvn test -Dtest=com.microfocus.ucmdb.rest.sample.integration.SimpleTroubleshootingScenarioSampleTest
     ```
@@ -192,6 +201,8 @@ First, we need to modify JUnit test:
     
     update the IP of UCMDB, port, username, password, integration point, job and job category. 
     
+    Then run this test:
+    
     ```sh
     mvn test -Dtest=com.microfocus.ucmdb.rest.sample.integration.ViewCIStatisticsScenarioSampleTest
     ```
@@ -204,6 +215,8 @@ First, we need to modify JUnit test:
     First, we need to modify JUnit test: 
     
     src\test\java\com\microfocus\ucmdb\rest\sample\integration\ViewIntegrationPointsScenarioSampleTest.java
+    
+    Then run this test:
     
     ```sh
     mvn test -Dtest=com.microfocus.ucmdb.rest.sample.integration.ViewIntegrationPointsScenarioSampleTest
