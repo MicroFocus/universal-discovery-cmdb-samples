@@ -73,7 +73,8 @@ java -cp target/sample-1.0-SNAPSHOT-jar-with-dependencies.jar com.microfocus.ucm
 
 * Get communication log on trigger  
     In this case, we will re-run a trigger of zone, wait until it finishes, then retrieve communication log.
-Run this command:
+
+    Run this command:
 
 ```sh
 java -cp target/sample-1.0-SNAPSHOT-jar-with-dependencies.jar com.microfocus.ucmdb.rest.sample.discovery.GetComlogOnTrigger
@@ -83,7 +84,8 @@ java -cp target/sample-1.0-SNAPSHOT-jar-with-dependencies.jar com.microfocus.ucm
 
 * Get zone result  
     In this case, we will activate a zone, then get the statistics and result of the zone.
-Run this command:
+
+    Run this command:
 
 ```sh
 java -cp target/sample-1.0-SNAPSHOT-jar-with-dependencies.jar com.microfocus.ucmdb.rest.sample.discovery.GetZoneResult
@@ -93,7 +95,8 @@ java -cp target/sample-1.0-SNAPSHOT-jar-with-dependencies.jar com.microfocus.ucm
 
 * Rerun failed triggers  
     In this case, we will activate a zone, then rerun the trigger if status is error. 
-Run this command:
+
+    Run this command:
 
 ```sh
 java -cp target/sample-1.0-SNAPSHOT-jar-with-dependencies.jar com.microfocus.ucmdb.rest.sample.discovery.RerunFailedTriggers
