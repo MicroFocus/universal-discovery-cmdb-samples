@@ -50,11 +50,9 @@ After we provided necessary information, it will output the token as the result.
 * Create AWS Zone  
     In this case, we will create a zone for AWS discovery. Please run this command:
 
-    ```sh
+```sh
 java -cp target/sample-1.0-SNAPSHOT-jar-with-dependencies.jar com.microfocus.ucmdb.rest.sample.discovery.CreateAWSZone
-    ```
-
-    
+```
 
 * Create Inventory Zone  
     In this case, we will create a zone which can do inventory discovery on a windows probe.
@@ -68,51 +66,50 @@ First, we need to modify configuration of the zone. Including these files:
 
     Then run this command:
     
-    ```sh
-    java -cp target/sample-1.0-SNAPSHOT-jar-with-dependencies.jar com.microfocus.ucmdb.rest.sample.discovery.CreateInventoryZoneForWindowsProbe
-    ```
-
+```sh
+java -cp target/sample-1.0-SNAPSHOT-jar-with-dependencies.jar com.microfocus.ucmdb.rest.sample.discovery.CreateInventoryZoneForWindowsProbe
+```
 
 
 * Get communication log on trigger  
     In this case, we will re-run a trigger of zone, wait until it finishes, then retrieve communication log.
 run this command:
-  
-    ```sh
+
+```sh
 java -cp target/sample-1.0-SNAPSHOT-jar-with-dependencies.jar com.microfocus.ucmdb.rest.sample.discovery.GetComlogOnTrigger
-    ```
+```
+
   
-  
-  
+
 * Get zone result  
     In this case, we will activate a zone, then get the statistics and result of the zone.
 run this command:
-  
-    ```sh
+
+```sh
 java -cp target/sample-1.0-SNAPSHOT-jar-with-dependencies.jar com.microfocus.ucmdb.rest.sample.discovery.GetZoneResult
-    ```
+```
+
   
-  
-  
+
 * Rerun failed triggers  
     In this case, we will activate a zone, then rerun the trigger if status is error. 
 Run this command:
-  
-    ```sh
+
+```sh
 java -cp target/sample-1.0-SNAPSHOT-jar-with-dependencies.jar com.microfocus.ucmdb.rest.sample.discovery.RerunFailedTriggers
-    ```
-  
-    
-  
+```
+
+​    
+
 * Delete zone  
     In this case, we will delete a zone, if the used profile is not oob and only refered by this zone, also delete it.
 
   Run this command:
   
-  ```sh
-  java -cp target/sample-1.0-SNAPSHOT-jar-with-dependencies.jar com.microfocus.ucmdb.rest.sample.discovery.DeleteZoneWithAllReference
-  ```
-  
+```sh
+java -cp target/sample-1.0-SNAPSHOT-jar-with-dependencies.jar com.microfocus.ucmdb.rest.sample.discovery.DeleteZoneWithAllReference
+```
+
   
 
 ### Integration
@@ -122,41 +119,41 @@ java -cp target/sample-1.0-SNAPSHOT-jar-with-dependencies.jar com.microfocus.ucm
     
     Run this command:
     
-    ```sh
-    java -cp target/sample-1.0-SNAPSHOT-jar-with-dependencies.jar com.microfocus.ucmdb.rest.sample.integration.JobSyncScenarioSample
-    ```
-    
-    
-    
+```sh
+java -cp target/sample-1.0-SNAPSHOT-jar-with-dependencies.jar com.microfocus.ucmdb.rest.sample.integration.JobSyncScenarioSample
+```
+
+
+​    
 * SimpleTroubleshootingScenarioSample  
     This case is to perform a simple troubleshooting by getting connection status and job status.
     
     Run this command:
     
-    ```sh
-    java -cp target/sample-1.0-SNAPSHOT-jar-with-dependencies.jar com.microfocus.ucmdb.rest.sample.integration.SimpleTroubleshootingScenarioSample
-    ```
-    
-    
-    
+```sh
+java -cp target/sample-1.0-SNAPSHOT-jar-with-dependencies.jar com.microfocus.ucmdb.rest.sample.integration.SimpleTroubleshootingScenarioSample
+```
+
+
+​    
 * ViewCIStatisticsScenarioSample  
     This case is to view the CI statistics for a specific job in a specific integration point.
     
     Run this command:
     
-    ```sh
-    java -cp target/sample-1.0-SNAPSHOT-jar-with-dependencies.jar com.microfocus.ucmdb.rest.sample.integration.ViewCIStatisticsScenarioSample
-    ```
-    
-    
-    
+```sh
+java -cp target/sample-1.0-SNAPSHOT-jar-with-dependencies.jar com.microfocus.ucmdb.rest.sample.integration.ViewCIStatisticsScenarioSample
+```
+
+
+​    
 * ViewIntegrationPointsScenarioSample  
     This case is to get the following information of specific sample points: status, statistics, details for each sample point. Then you can view the job list and status of each job.
     
     Run this command:
     
-    ```sh
-    java -cp target/sample-1.0-SNAPSHOT-jar-with-dependencies.jar com.microfocus.ucmdb.rest.sample.integration.ViewIntegrationPointsScenarioSample
-    ```
-    
-    
+```sh
+java -cp target/sample-1.0-SNAPSHOT-jar-with-dependencies.jar com.microfocus.ucmdb.rest.sample.integration.ViewIntegrationPointsScenarioSample
+```
+
+​    
