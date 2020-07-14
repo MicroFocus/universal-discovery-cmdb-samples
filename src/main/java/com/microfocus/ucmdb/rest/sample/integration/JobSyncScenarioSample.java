@@ -4,6 +4,7 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.Console;
 import java.io.IOException;
 import java.security.KeyManagementException;
 import java.security.NoSuchAlgorithmException;
@@ -14,16 +15,27 @@ import java.util.*;
  */
 public class JobSyncScenarioSample {
     public static void main(String[] args) throws Exception {
+        String hostname;
+        String port;
+        String username;
+        String password;
 
-        if(args.length < 4){
-            System.out.println("Parameters: hostname port username password");
-            System.exit(0);
+        if (args.length < 4) {
+            Scanner sc = new Scanner(System.in);
+            System.out.print("Please enter hostname/IP of UCMDB Server: ");
+            hostname = sc.hasNextLine() ? sc.nextLine() : "";
+            System.out.print("Please enter port of UCMDB Server: ");
+            port = sc.hasNext() ? sc.next() : "";
+            System.out.print("Please enter username for UCMDB: ");
+            username = sc.hasNext() ? sc.next() : "";
+            Console console = System.console();
+            password = new String(console.readPassword("Please enter password for UCMDB: "));
+        } else {
+            hostname = args[0];
+            port = args[1];
+            username = args[2];
+            password = args[3];
         }
-
-        String hostname = args[0];
-        String port = args[1];
-        String username = args[2];
-        String password = args[3];
 
         String rootURL = RestApiConnectionUtils.buildRootUrl(hostname, port,false);
 

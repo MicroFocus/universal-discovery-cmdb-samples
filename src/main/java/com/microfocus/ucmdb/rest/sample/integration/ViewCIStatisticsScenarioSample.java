@@ -4,24 +4,48 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.Console;
+import java.util.Scanner;
+
 /*
       This scenario is to view the CI statistics for a specific job in a specific sample point.
  */
 public class ViewCIStatisticsScenarioSample {
     //the parameters you need to provide are: serverIp, userName, password, integrationPointName, jobName and jobCategory
     public static void main(String[] args) throws Exception {
-        if(args.length < 7){
-            System.out.println("Parameters: hostname port username password integrationPointName jobName jobCategoryName");
-            System.exit(0);
-        }
+        String hostname;
+        String port;
+        String username;
+        String password;
+        String integrationPointName;
+        String jobName;
+        String jobCategoryName;
 
-        String hostname = args[0];
-        String port = args[1];
-        String username = args[2];
-        String password = args[3];
-        String integrationPointName = args[4];
-        String jobName = args[5];
-        String jobCategoryName = args[6];
+        if (args.length < 7) {
+            Scanner sc = new Scanner(System.in);
+            System.out.print("Please enter hostname/IP of UCMDB Server: ");
+            hostname = sc.hasNextLine() ? sc.nextLine() : "";
+            System.out.print("Please enter port of UCMDB Server: ");
+            port = sc.hasNext() ? sc.next() : "";
+            System.out.print("Please enter username for UCMDB: ");
+            username = sc.hasNext() ? sc.next() : "";
+            Console console = System.console();
+            password = new String(console.readPassword("Please enter password for UCMDB: "));
+            System.out.print("Please enter integration point name: ");
+            integrationPointName = sc.hasNext() ? sc.next() : "";
+            System.out.print("Please enter job name: ");
+            jobName = sc.hasNext() ? sc.next() : "";
+            System.out.print("Please enter job category name(POPULATION/PUSH): ");
+            jobCategoryName = sc.hasNext() ? sc.next() : "";
+        } else {
+            hostname = args[0];
+            port = args[1];
+            username = args[2];
+            password = args[3];
+            integrationPointName = args[4];
+            jobName = args[5];
+            jobCategoryName = args[6];
+        }
 
         String rootURL = RestApiConnectionUtils.buildRootUrl(hostname, port,false);
 

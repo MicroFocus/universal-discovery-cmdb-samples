@@ -3,6 +3,7 @@ import com.microfocus.ucmdb.rest.sample.utils.RestApiConnectionUtils;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
+import java.io.Console;
 import java.util.*;
 /*
      This scenario is to get the following information of specific sample points: status, statistics, details for each sample point.
@@ -11,17 +12,31 @@ import java.util.*;
 public class ViewIntegrationPointsScenarioSample {
     //the parameters you need to provide are: serverIp, userName, password and integrationPointName
     public static void main(String[] args) throws Exception {
+        String hostname;
+        String port;
+        String username;
+        String password;
+        String integrationPointName;
 
-        if(args.length < 4){
-            System.out.println("Parameters: hostname port username password integrationPointName");
-            System.exit(0);
+        if (args.length < 5) {
+            Scanner sc = new Scanner(System.in);
+            System.out.print("Please enter hostname/IP of UCMDB Server: ");
+            hostname = sc.hasNextLine() ? sc.nextLine() : "";
+            System.out.print("Please enter port of UCMDB Server: ");
+            port = sc.hasNext() ? sc.next() : "";
+            System.out.print("Please enter username for UCMDB: ");
+            username = sc.hasNext() ? sc.next() : "";
+            Console console = System.console();
+            password = new String(console.readPassword("Please enter password for UCMDB: "));
+            System.out.print("Please enter integration point name: ");
+            integrationPointName = sc.hasNext() ? sc.next() : "";
+        } else {
+            hostname = args[0];
+            port = args[1];
+            username = args[2];
+            password = args[3];
+            integrationPointName = args[4];
         }
-
-        String hostname = args[0];
-        String port = args[1];
-        String username = args[2];
-        String password = args[3];
-        String integrationPointName = args[4];
 
         String rootURL = RestApiConnectionUtils.buildRootUrl(hostname, port,false);
 

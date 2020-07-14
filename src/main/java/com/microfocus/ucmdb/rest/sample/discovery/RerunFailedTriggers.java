@@ -6,8 +6,10 @@ import com.fasterxml.jackson.databind.node.ObjectNode;
 import com.microfocus.ucmdb.rest.sample.utils.PayloadUtils;
 import com.microfocus.ucmdb.rest.sample.utils.RestApiConnectionUtils;
 
+import java.io.Console;
 import java.io.IOException;
 import java.net.URLEncoder;
+import java.util.Scanner;
 
 public class RerunFailedTriggers {
     private String rootURL;
@@ -17,16 +19,31 @@ public class RerunFailedTriggers {
     }
 
     public static void main(String[] args) throws Exception {
-        if (args.length < 5) {
-            System.out.println("Parameters: hostname port username password zonename");
-            System.exit(0);
-        }
+        String hostname;
+        String port;
+        String username;
+        String password;
+        String zonename;
 
-        String hostname = args[0];
-        String port = args[1];
-        String username = args[2];
-        String password = args[3];
-        String zonename = args[4];
+        if (args.length < 5) {
+            Scanner sc = new Scanner(System.in);
+            System.out.print("Please enter hostname/IP of UCMDB Server: ");
+            hostname = sc.hasNextLine() ? sc.nextLine() : "";
+            System.out.print("Please enter port of UCMDB Server: ");
+            port = sc.hasNext() ? sc.next() : "";
+            System.out.print("Please enter username for UCMDB: ");
+            username = sc.hasNext() ? sc.next() : "";
+            Console console = System.console();
+            password = new String(console.readPassword("Please enter password for UCMDB: "));
+            System.out.print("Please enter zonename: ");
+            zonename = sc.hasNext() ? sc.next() : "";
+        } else {
+            hostname = args[0];
+            port = args[1];
+            username = args[2];
+            password = args[3];
+            zonename = args[4];
+        }
 
         String rootURL = RestApiConnectionUtils.buildRootUrl(hostname, port,false);
 

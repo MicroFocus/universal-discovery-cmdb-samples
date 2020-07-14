@@ -13,8 +13,7 @@ public class SimpleTroubleshootingScenarioSampleTest {
 
     @Test
     public void testMain() throws Exception {
-        SimpleTroubleshootingScenarioSample.main(new String[]{"127.0.0.1","8443","admin","admin", "integrationPoint", "pushJob", "PUSH"});
-        SimpleTroubleshootingScenarioSample.main(new String[]{"127.0.0.1","8443","admin","admin", "integrationPoint", "populationJob", "POPULATION"});
+        SimpleTroubleshootingScenarioSample.main(new String[]{"${UCMDB_IP_ADDRESS}", "${UCMDB_PORT}", "${UCMDB_USERNAME}", "${UCMDB_PASSWORD}", "${INTEGRATION_POINT}", "${JOB_NAME}", "${JOB_CATEGORY}"});
     }
 
 } 

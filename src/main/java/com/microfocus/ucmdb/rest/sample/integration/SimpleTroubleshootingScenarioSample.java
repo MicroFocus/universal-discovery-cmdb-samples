@@ -4,6 +4,7 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.Console;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -14,19 +15,39 @@ import java.util.*;
 public class SimpleTroubleshootingScenarioSample {
     //the parameters user need to input are (serverIp, userName, password, integrationPointName, jobName, jobCategory)
     public static void main(String[] args) throws Exception {
+        String hostname;
+        String port;
+        String username;
+        String password;
+        String integrationPointName;
+        String jobName;
+        String jobCategoryName;
 
-        if(args.length < 7){
-            System.out.println("Parameters: hostname port username password integrationPointName jobName jobCategoryName");
-            System.exit(0);
+        if (args.length < 7) {
+            Scanner sc = new Scanner(System.in);
+            System.out.print("Please enter hostname/IP of UCMDB Server: ");
+            hostname = sc.hasNextLine() ? sc.nextLine() : "";
+            System.out.print("Please enter port of UCMDB Server: ");
+            port = sc.hasNext() ? sc.next() : "";
+            System.out.print("Please enter username for UCMDB: ");
+            username = sc.hasNext() ? sc.next() : "";
+            Console console = System.console();
+            password = new String(console.readPassword("Please enter password for UCMDB: "));
+            System.out.print("Please enter integration point name: ");
+            integrationPointName = sc.hasNext() ? sc.next() : "";
+            System.out.print("Please enter job name: ");
+            jobName = sc.hasNext() ? sc.next() : "";
+            System.out.print("Please enter job category name(POPULATION/PUSH): ");
+            jobCategoryName = sc.hasNext() ? sc.next() : "";
+        } else {
+            hostname = args[0];
+            port = args[1];
+            username = args[2];
+            password = args[3];
+            integrationPointName = args[4];
+            jobName = args[5];
+            jobCategoryName = args[6];
         }
-
-        String hostname = args[0];
-        String port = args[1];
-        String username = args[2];
-        String password = args[3];
-        String integrationPointName = args[4];
-        String jobName = args[5];
-        String jobCategoryName = args[6];
 
         String rootURL = RestApiConnectionUtils.buildRootUrl(hostname, port,false);
 

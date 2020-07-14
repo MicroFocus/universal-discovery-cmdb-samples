@@ -19,10 +19,10 @@ This is a project for users who are using UCMDB and want to know how to manipula
 
 This project requires jdk1.8 or above and maven 3. Go check them out if you don't have them locally installed. 
 
-After you cloned the project to your local machine, open the command console and go to project root folder, compile the project.
+After you cloned the project to your local machine, open the command console and go to project root folder, build the project into a jar.
 
 ```sh
-mvn compile
+mvn package
 ```
 
 Make sure you can see 'BUILD SUCCESS' at the end.
@@ -35,113 +35,71 @@ In order to run sample codes correctly, make sure that you have enabled the zone
 
 ### Quick Start
 
-In order to have a quick look at the REST API usage, we are going to test a simplest operation: Login. 
+Let's have a quick look at the REST API usage by testing a simplest operation: Login. 
 
-First, we need to modify JUnit test: 
-
-src\test\java\com\microfocus\ucmdb\rest\sample\quickstart\LogInToUCMDBTest.java.
-
-It may look like this:
-
-  ```java
-public class LogInToUCMDBTest {
-
-    @Test
-    public void testMain() throws Exception {
-        LogInToUCMDB.main(new String[]{"127.0.0.1", "8443", "admin", "admin"});
-    }
-}
-  ```
-We need to update the IP of UCMDB, port, username and password. After that, we open a console and go to project root folder, type this command to run JUnit test:
+After we built the project into a jar, we can open a console and go to project root folder, run the case like this:
 
 ```sh
-mvn test -Dtest=com.microfocus.ucmdb.rest.sample.quickstart.LogInToUCMDBTest
+java -cp target/sample-1.0-SNAPSHOT-jar-with-dependencies.jar com.microfocus.ucmdb.rest.sample.quickstart.LogInToUCMDB
 ```
 
-It will output the token if executed successfully.
+After we provided necessary information, it will output the token as the result.
 
 
 ### Discovery
 * Create AWS Zone  
-    In this case, we will create a zone for AWS discovery. 
+    In this case, we will create a zone for AWS discovery. Please run this command:
 
-  First, we need to modify JUnit test: 
-
-  src\test\java\com\microfocus\ucmdb\rest\sample\discovery\CreateAWSZoneTest.java
-
-  update the IP of UCMDB, port, username and password.
-
-  Second, we update the protocol_username and protocol_password in data\payload\CreateAWSZone_1.json.
-  
-  Then we run this test:
-  
     ```sh
-    mvn test -Dtest=com.microfocus.ucmdb.rest.sample.discovery.CreateAWSZoneTest
+java -cp target/sample-1.0-SNAPSHOT-jar-with-dependencies.jar com.microfocus.ucmdb.rest.sample.discovery.CreateAWSZone
     ```
-  
+
     
-  
+
 * Create Inventory Zone  
     In this case, we will create a zone which can do inventory discovery on a windows probe.
-First, we need to modify JUnit test: src\test\java\com\microfocus\ucmdb\rest\sample\discovery\CreateInventoryZoneForWindowsProbeTest.java
-
-    update the IP of UCMDB, port, username and password.
-
-    Second, modify configuration of the zone. Including these files:
+First, we need to modify configuration of the zone. Including these files:
 
     data\payload\CreateInventoryZoneForWindowsProbe_1.json, update the range segment.
 
     data\payload\CreateInventoryZoneForWindowsProbe_2.json, update the ipRanges segment.
-    
+
     data\payload\CreateInventoryZoneForWindowsProbe_3.json, update the credential.
-    
-    Then run this test:
+
+    Then run this command:
     
     ```sh
-    mvn test -Dtest=com.microfocus.ucmdb.rest.sample.discovery.CreateInventoryZoneForWindowsProbeTest
+    java -cp target/sample-1.0-SNAPSHOT-jar-with-dependencies.jar com.microfocus.ucmdb.rest.sample.discovery.CreateInventoryZoneForWindowsProbe
     ```
 
 
 
 * Get communication log on trigger  
     In this case, we will re-run a trigger of zone, wait until it finishes, then retrieve communication log.
-First, we need to modify JUnit test: 
-  
-  src\test\java\com\microfocus\ucmdb\rest\sample\discovery\GetComlogOnTriggerTest.java
-update the IP of UCMDB, port, username, password and zone name.
-  
-  Then run this test:
+run this command:
   
     ```sh
-    mvn test -Dtest=com.microfocus.ucmdb.rest.sample.discovery.GetComlogOnTriggerTest
+java -cp target/sample-1.0-SNAPSHOT-jar-with-dependencies.jar com.microfocus.ucmdb.rest.sample.discovery.GetComlogOnTrigger
     ```
   
   
   
 * Get zone result  
     In this case, we will activate a zone, then get the statistics and result of the zone.
-First, we need to modify JUnit test: 
-  
-  src\test\java\com\microfocus\ucmdb\rest\sample\discovery\GetZoneResultTest.java
-
-  Then run this test:
+run this command:
   
     ```sh
-    mvn test -Dtest=com.microfocus.ucmdb.rest.sample.discovery.GetZoneResultTest
+java -cp target/sample-1.0-SNAPSHOT-jar-with-dependencies.jar com.microfocus.ucmdb.rest.sample.discovery.GetZoneResult
     ```
   
   
   
 * Rerun failed triggers  
     In this case, we will activate a zone, then rerun the trigger if status is error. 
-First, we need to modify JUnit test: 
-  
-  src\test\java\com\microfocus\ucmdb\rest\sample\discovery\RerunFailedTriggersTest.java
-
-  Then run this test:
+Run this command:
   
     ```sh
-    mvn test -Dtest=com.microfocus.ucmdb.rest.sample.discovery.RerunFailedTriggersTest
+java -cp target/sample-1.0-SNAPSHOT-jar-with-dependencies.jar com.microfocus.ucmdb.rest.sample.discovery.RerunFailedTriggers
     ```
   
     
@@ -149,13 +107,10 @@ First, we need to modify JUnit test:
 * Delete zone  
     In this case, we will delete a zone, if the used profile is not oob and only refered by this zone, also delete it.
 
-  First, we need to modify JUnit test: 
-  src\test\java\com\microfocus\ucmdb\rest\sample\discovery\DeleteZoneWithAllReferenceTest.java
-  
-  Then run this test:
+  Run this command:
   
   ```sh
-  mvn test -Dtest=com.microfocus.ucmdb.rest.sample.discovery.DeleteZoneWithAllReferenceTest
+  java -cp target/sample-1.0-SNAPSHOT-jar-with-dependencies.jar com.microfocus.ucmdb.rest.sample.discovery.DeleteZoneWithAllReference
   ```
   
   
@@ -164,13 +119,11 @@ First, we need to modify JUnit test:
 * JobSyncScenarioSample  
     This case is to run full sync and then delta sync of all jobs under inactive integration points.
     First, we need to create an integration point with push and population jobs in it. But do not activate it immediately.
-    Second, we need to modify JUnit test: 
-    src\test\java\com\microfocus\ucmdb\rest\sample\integration\JobSyncScenarioSampleTest.java
     
-    Then run this test:
+    Run this command:
     
     ```sh
-    mvn test -Dtest=com.microfocus.ucmdb.rest.sample.integration.JobSyncScenarioSampleTest
+    java -cp target/sample-1.0-SNAPSHOT-jar-with-dependencies.jar com.microfocus.ucmdb.rest.sample.integration.JobSyncScenarioSample
     ```
     
     
@@ -178,16 +131,10 @@ First, we need to modify JUnit test:
 * SimpleTroubleshootingScenarioSample  
     This case is to perform a simple troubleshooting by getting connection status and job status.
     
-    First, we need to modify JUnit test: 
-    
-    src\test\java\com\microfocus\ucmdb\rest\sample\integration\SimpleTroubleshootingScenarioSampleTest.java
-    
-    update the IP of UCMDB, port, username, password, integration point, job and job category. 
-    
-    Then run this test:
+    Run this command:
     
     ```sh
-    mvn test -Dtest=com.microfocus.ucmdb.rest.sample.integration.SimpleTroubleshootingScenarioSampleTest
+    java -cp target/sample-1.0-SNAPSHOT-jar-with-dependencies.jar com.microfocus.ucmdb.rest.sample.integration.SimpleTroubleshootingScenarioSample
     ```
     
     
@@ -195,16 +142,10 @@ First, we need to modify JUnit test:
 * ViewCIStatisticsScenarioSample  
     This case is to view the CI statistics for a specific job in a specific integration point.
     
-    First, we need to modify JUnit test: 
-    
-    src\test\java\com\microfocus\ucmdb\rest\sample\integration\ViewCIStatisticsScenarioSampleTest.java
-    
-    update the IP of UCMDB, port, username, password, integration point, job and job category. 
-    
-    Then run this test:
+    Run this command:
     
     ```sh
-    mvn test -Dtest=com.microfocus.ucmdb.rest.sample.integration.ViewCIStatisticsScenarioSampleTest
+    java -cp target/sample-1.0-SNAPSHOT-jar-with-dependencies.jar com.microfocus.ucmdb.rest.sample.integration.ViewCIStatisticsScenarioSample
     ```
     
     
@@ -212,14 +153,10 @@ First, we need to modify JUnit test:
 * ViewIntegrationPointsScenarioSample  
     This case is to get the following information of specific sample points: status, statistics, details for each sample point. Then you can view the job list and status of each job.
     
-    First, we need to modify JUnit test: 
-    
-    src\test\java\com\microfocus\ucmdb\rest\sample\integration\ViewIntegrationPointsScenarioSampleTest.java
-    
-    Then run this test:
+    Run this command:
     
     ```sh
-    mvn test -Dtest=com.microfocus.ucmdb.rest.sample.integration.ViewIntegrationPointsScenarioSampleTest
+    java -cp target/sample-1.0-SNAPSHOT-jar-with-dependencies.jar com.microfocus.ucmdb.rest.sample.integration.ViewIntegrationPointsScenarioSample
     ```
     
     

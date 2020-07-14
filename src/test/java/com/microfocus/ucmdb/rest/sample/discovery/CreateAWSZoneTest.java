@@ -13,7 +13,7 @@ public class CreateAWSZoneTest {
 
     @Test
     public void testMain() throws Exception {
-        CreateAWSZone.main(new String[]{"127.0.0.1","8443","admin","admin"});
+        CreateAWSZone.main(new String[]{"${UCMDB_IP_ADDRESS}", "${UCMDB_PORT}", "${UCMDB_USERNAME}", "${UCMDB_PASSWORD}"});
     }
 
 } 
