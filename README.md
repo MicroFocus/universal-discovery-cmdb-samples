@@ -48,8 +48,10 @@ After we provided necessary information, it will output the token as the result.
 
 ### Discovery
 * Create AWS Zone  
-    In this case, we will create a zone for AWS discovery. Please run this command:
-
+    In this case, we will create a zone for AWS discovery. 
+First, we need to modify the AWS credential in this file:
+    data\payload\CreateAWSZone_1.json
+    Then run this command:
 ```sh
 java -cp target/sample-1.0-SNAPSHOT-jar-with-dependencies.jar com.microfocus.ucmdb.rest.sample.discovery.CreateAWSZone
 ```
