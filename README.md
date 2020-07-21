@@ -1,4 +1,4 @@
-# Sample code for CMS RESTAPI
+# Sample Code for CMS REST API
 
 ## Table of Contents
 
@@ -17,27 +17,25 @@ This is a project for users who are using UCMDB and want to know how to manipula
 
 ## Install
 
-This project requires jdk1.8 or above and maven 3. Go check them out if you don't have them locally installed. 
-
-After you cloned the project to your local machine, open the command console and go to project root folder, build the project into a jar.
-
-```sh
-mvn package
-```
-
-Make sure you can see 'BUILD SUCCESS' at the end.
+1. Prerequisite: This project requires JDK 1.8 (or later) and maven 3. Go check them out if you don't have them locally installed. 
+2. Clone the project so that you have a local copy. 
+3. Go to your local project root folder, open the command console and run the following command to build the project into a JAR file:
+   ```sh
+   mvn package
+   ```
+   Make sure you see 'BUILD SUCCESS' at the end.
 
 
 
 ## Usage
 
-In order to run sample codes correctly, make sure that you have enabled the zone based discovery in UCMDB.
+In order to run sample codes correctly, make sure that you have enabled the new zone-based discovery solution in CMS.
 
 ### Quick Start
 
-Let's have a quick look at the REST API usage by testing a simplest operation: Login. 
+Let's have a quick look at the REST API usage by testing a simple operation: Login. 
 
-After we built the project into a jar, we can open a console and go to project root folder, run the case like this:
+After building the project into a JAR file, open a command console and go to the project root folder, run the case like this:
 
 ```sh
 java -cp target/sample-1.0-SNAPSHOT-jar-with-dependencies.jar com.microfocus.ucmdb.rest.sample.quickstart.LogInToUCMDB
