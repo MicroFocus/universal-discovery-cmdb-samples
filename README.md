@@ -47,7 +47,7 @@ After we provided necessary information, it will output the token as the result.
 
 
 ### Discovery
-* Create AWS Zone  
+* Create Zone for AWS  
     In this case, we will create a zone for AWS discovery. 
 First, we need to modify the AWS credential in this file:
     data\payload\CreateAWSZone_1.json
@@ -57,7 +57,7 @@ First, we need to modify the AWS credential in this file:
 java -cp target/sample-1.0-SNAPSHOT-jar-with-dependencies.jar com.microfocus.ucmdb.rest.sample.discovery.CreateAWSZone
 ```
 
-* Create Inventory Zone  
+* Create Zone for Inventory  
     In this case, we will create a zone which can do inventory discovery on a windows probe.
 First, we need to modify configuration of the zone. Including these files:
 
@@ -119,7 +119,7 @@ java -cp target/sample-1.0-SNAPSHOT-jar-with-dependencies.jar com.microfocus.ucm
   
 
 ### Integration
-* JobSyncScenarioSample  
+* Sample of job sync scenario  
     This case is to run full sync and then delta sync of all jobs under inactive integration points.
     First, we need to create an integration point with push and population jobs in it. But do not activate it immediately.
     
@@ -131,7 +131,7 @@ java -cp target/sample-1.0-SNAPSHOT-jar-with-dependencies.jar com.microfocus.ucm
 
 
 ​    
-* SimpleTroubleshootingScenarioSample  
+* Sample of troubleshooting scenario  
     This case is to perform a simple troubleshooting by getting connection status and job status.
     
     Run this command:
@@ -142,7 +142,7 @@ java -cp target/sample-1.0-SNAPSHOT-jar-with-dependencies.jar com.microfocus.ucm
 
 
 ​    
-* ViewCIStatisticsScenarioSample  
+* Sample of viewing CI statistics scenario  
     This case is to view the CI statistics for a specific job in a specific integration point.
     
     Run this command:
@@ -153,7 +153,7 @@ java -cp target/sample-1.0-SNAPSHOT-jar-with-dependencies.jar com.microfocus.ucm
 
 
 ​    
-* ViewIntegrationPointsScenarioSample  
+* sample of viewing IntegrationPoints scenario  
     This case is to get the following information of specific sample points: status, statistics, details for each sample point. Then you can view the job list and status of each job.
     
     Run this command:
