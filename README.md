@@ -119,7 +119,7 @@ java -cp target/sample-1.0-SNAPSHOT-jar-with-dependencies.jar com.microfocus.ucm
   
 
 ### Integration
-* Sample of job sync  
+* Job sync  
     This case is to run full sync and then delta sync of all jobs under inactive integration points.
     First, we need to create an integration point with push and population jobs in it. But do not activate it immediately.
     
@@ -131,7 +131,7 @@ java -cp target/sample-1.0-SNAPSHOT-jar-with-dependencies.jar com.microfocus.ucm
 
 
 ​    
-* Sample of troubleshooting  
+* Troubleshooting  
     This case is to perform a simple troubleshooting by getting connection status and job status.
     
     Run this command:
@@ -142,7 +142,7 @@ java -cp target/sample-1.0-SNAPSHOT-jar-with-dependencies.jar com.microfocus.ucm
 
 
 ​    
-* Sample of viewing CI statistics  
+* Viewing CI statistics  
     This case is to view the CI statistics for a specific job in a specific integration point.
     
     Run this command:
@@ -153,7 +153,7 @@ java -cp target/sample-1.0-SNAPSHOT-jar-with-dependencies.jar com.microfocus.ucm
 
 
 ​    
-* sample of viewing IntegrationPoints  
+* Viewing IntegrationPoints  
     This case is to get the following information of specific sample points: status, statistics, details for each sample point. Then you can view the job list and status of each job.
     
     Run this command:
