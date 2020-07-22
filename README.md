@@ -19,7 +19,7 @@ This is a project for users who are using UCMDB and want to know how to manipula
 
 1. Prerequisite: This project requires JDK 1.8 (or later) and maven 3. Go check them out if you don't have them locally installed. 
 2. Clone the project so that you have a local copy. 
-3. Go to your local project root folder, open the command console and run the following command to build the project into a JAR file:
+3. Go to your local project root folder, open the command console, change the path to project root folder and run the following command to build the project into a JAR file:
    ```sh
    mvn package
    ```
