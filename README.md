@@ -11,7 +11,7 @@
 
 ## Background
 
-This is a project for users who are using UCMDB and want to know how to manipulate Discovery through REST API. 
+This project provides CMS REST API code samples for UCMDB users who would like to perform zone-based discovery and integration through REST API. 
 
 
 
@@ -19,12 +19,16 @@ This is a project for users who are using UCMDB and want to know how to manipula
 
 1. Prerequisite: This project requires JDK 1.8 (or later) and Maven 3. 
    Make sure you already have them on your local machine. 
+   
 2. Clone the project so that you have a local copy. 
+
 3. Go to the project root folder on your local mahine, open Command Prompt and run the following command to build the project into a JAR file:
+
    ```sh
    mvn package
    ```
    When the building process completes, you should see the 'BUILD SUCCESS' message at the end.
+   
 4. Go to the 'target' folder, you should find the JAR file you just built.
 
 
@@ -50,7 +54,7 @@ This use case shows the easy usage of CMS REST API with a simple operation: Logi
 
 
 ### Discovery
-* Create Zone for AWS Discovery  
+* Create a zone for AWS Discovery  
 
   This use case shows how to create a zone for AWS discovery with REST API.  
   
@@ -84,7 +88,7 @@ This use case shows the easy usage of CMS REST API with a simple operation: Logi
   
     
 
-* Create Zone for Inventory Discovery  
+* Create a zone for Inventory Discovery  
 
   This use case shows how to create a zone for inventory discovery on a Windows probe with REST API.
   
@@ -139,9 +143,9 @@ This use case shows the easy usage of CMS REST API with a simple operation: Logi
 
     
 
-* Delete zone  
+* Delete a zone  
   
-  This use case shows how to delete a zone, if the used profile is not out-of-the-box (OOTB) and is only referenced by this zone, also deletes it.
+  This use case shows how to delete a zone. If IP range group, schedule, credential group, or job group specified for the zone is not an out-of-the-box (OOTB) resource and is only referenced by this zone, also deletes it.
 
   From the project root folder on your local machine, run the following command:
   
@@ -179,7 +183,7 @@ This use case shows the easy usage of CMS REST API with a simple operation: Logi
 
 
 ​    
-* Viewing CI statistics  
+* View CI statistics  
 
   This use case views CI statistics for a specific job in a specific integration point.
     
@@ -191,9 +195,9 @@ This use case shows the easy usage of CMS REST API with a simple operation: Logi
 
 
 ​    
-* Viewing IntegrationPoints  
+* View Integration Points  
 
-  This use case allows you to get the following information of specific sample points: status, statistics, details for each sample point. Then you can view the job  list and status of each job.
+  This use case shows how to get the following information of specific integration points: status, statistics, details for each sample integration point. Then you can view the job list and status of each job.
     
   From the project root folder on your local machine, run the following command:
     
