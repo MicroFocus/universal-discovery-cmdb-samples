@@ -36,7 +36,7 @@ In order to run the code samples properly, make sure you have enabled the new zo
 
 ### Quick Start
 
-The example below shows the easy usage of CMS REST API with a simple operation: Login. 
+This example shows the easy usage of CMS REST API with a simple operation: Login. 
 
 1. Go to the project root folder on your local mahine, open Command Prompt and run the following command:
 
@@ -50,12 +50,24 @@ The example below shows the easy usage of CMS REST API with a simple operation: 
 
 ### Discovery
 * Create Zone for AWS Discovery  
-    In this use case, we will create a zone for AWS discovery. 
-    1. Open the "data\payload\CreateAWSZone_1.json" file, modify the parameter values (incl. AWS credential) as necessary, and then save the file.
-    2. Run the following command:
-       ```sh
-       java -cp target/sample-1.0-SNAPSHOT-jar-with-dependencies.jar com.microfocus.ucmdb.rest.sample.discovery.CreateAWSZone
-       ```
+  This use case shows how to create a zone for AWS discovery with REST API.  
+  1. Go to the project root folder on your local mahine, and open the following file: 
+     data\payload\CreateAWSZone_1.json
+  2. Modify the AWS credential parameters' values as necessary, and save the file.
+  3. From the project root folder, run the following command:
+     ```sh
+     java -cp target/sample-1.0-SNAPSHOT-jar-with-dependencies.jar com.microfocus.ucmdb.rest.sample.discovery.CreateAWSZone
+     ```
+  4. Provide necessary information when prompted.
+  5. When the sample code execution is completed, you should be able to see in the log what steps the sample has executed as well as execution result for each step: 
+     a. LOG IN TO SERVER
+     b. ENSURE ZONE BASED DISCOVERY IS ENABLED
+     c. CREATE AWS CREDENTIAL
+     d. CREATE AWS CREDENTIAL GROUP
+     e. CREATE AWS JOB GROUP
+     f. CERATE AWS ZONE
+  6. Go to the Discovery module in CMS UI, you should see an AWSZONE is created successfully.  
+  
     
 
 * Create Zone for Inventory Discovery  
