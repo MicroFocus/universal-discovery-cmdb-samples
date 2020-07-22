@@ -17,43 +17,46 @@ This is a project for users who are using UCMDB and want to know how to manipula
 
 ## Install
 
-1. Prerequisite: This project requires JDK 1.8 (or later) and maven 3. Go check them out if you don't have them locally installed. 
+1. Prerequisite: This project requires JDK 1.8 (or later) and Maven 3. Make sure you already have them on your local machine. 
 2. Clone the project so that you have a local copy. 
-3. Go to your local project root folder, open the command console, change the path to project root folder and run the following command to build the project into a JAR file:
+3. Go to the project root folder on your local mahine, open Command Prompt and run the following command to build the project into a JAR file:
    ```sh
    mvn package
    ```
-   Make sure you see 'BUILD SUCCESS' at the end.
+   When the building process completes, you should see the 'BUILD SUCCESS' message at the end.
+4. Go to the 'target' folder, you should find the JAR file you just built.
 
 
 
 ## Usage
 
-In order to run sample codes correctly, make sure that you have enabled the new zone-based discovery solution in CMS.
+This section explains how to use CMS REST API code samples. 
+
+In order to run the code samples properly, make sure you have enabled the new zone-based discovery solution in CMS UI.
 
 ### Quick Start
 
-Let's have a quick look at the REST API usage by testing a simple operation: Login. 
+The example below shows the easy usage of CMS REST API with a simple operation: Login. 
 
-After building the project into a JAR file, open a command console and go to the project root folder, run the case like this:
+1. Go to the project root folder on your local mahine, open Command Prompt and run the following command:
 
-```sh
-java -cp target/sample-1.0-SNAPSHOT-jar-with-dependencies.jar com.microfocus.ucmdb.rest.sample.quickstart.LogInToUCMDB
-```
-
-After we provided necessary information, it will output the token as the result.
+   ```sh
+   java -cp target/sample-1.0-SNAPSHOT-jar-with-dependencies.jar com.microfocus.ucmdb.rest.sample.quickstart.LogInToUCMDB
+   ```
+2. Provide necessary information when prompted, for example, hostname/IP of the UCMDB server, port of the UCMDB server, username, and password.
+3. The response shows that the sample code has connected to the UCMDB server successfully, and you should see the 'LOG IN TO SERVER' as well as the token retured. 
+   Then you can need this token for REST API operations.
 
 
 ### Discovery
 * Create Zone for AWS Discovery  
-    In this case, we will create a zone for AWS discovery. 
-First, we need to modify the AWS credential in this file:
-    data\payload\CreateAWSZone_1.json
+    In this use case, we will create a zone for AWS discovery. 
+    1. Open the "data\payload\CreateAWSZone_1.json" file, modify the parameter values (incl. AWS credential) as necessary, and then save the file.
+    2. Run the following command:
+       ```sh
+       java -cp target/sample-1.0-SNAPSHOT-jar-with-dependencies.jar com.microfocus.ucmdb.rest.sample.discovery.CreateAWSZone
+       ```
     
-    Then run this command:
-```sh
-java -cp target/sample-1.0-SNAPSHOT-jar-with-dependencies.jar com.microfocus.ucmdb.rest.sample.discovery.CreateAWSZone
-```
 
 * Create Zone for Inventory Discovery  
     In this case, we will create a zone which can do inventory discovery on a windows probe.
