@@ -37,7 +37,7 @@ In order to run the code samples properly, make sure you have enabled the new zo
 
 ### Quick Start
 
-This example shows the easy usage of CMS REST API with a simple operation: Login. 
+This use case shows the easy usage of CMS REST API with a simple operation: Login. 
 
 1. Go to the project root folder on your local mahine, open Command Prompt and run the following command:
 
@@ -85,108 +85,120 @@ This example shows the easy usage of CMS REST API with a simple operation: Login
     
 
 * Create Zone for Inventory Discovery  
-    In this case, we will create a zone which can do inventory discovery on a windows probe.
-First, we need to modify configuration of the zone. Including these files:
 
-    data\payload\CreateInventoryZoneForWindowsProbe_1.json, update the range segment.
+  This use case shows how to create a zone for inventory discovery on a Windows probe with REST API.
+  
+  1. Open each of the following files and modify values of zone configuration parameters as necessary:
 
-    data\payload\CreateInventoryZoneForWindowsProbe_2.json, update the ipRanges segment.
+     data\payload\CreateInventoryZoneForWindowsProbe_1.json - update the 'range' section
 
-    data\payload\CreateInventoryZoneForWindowsProbe_3.json, update the credential.
+     data\payload\CreateInventoryZoneForWindowsProbe_2.json - update the 'ipRanges' section
 
-    Then run this command:
+     data\payload\CreateInventoryZoneForWindowsProbe_3.json - update the 'credential' section
+
+  2. From the project root folder on your local machine, run the following command:
     
-```sh
-java -cp target/sample-1.0-SNAPSHOT-jar-with-dependencies.jar com.microfocus.ucmdb.rest.sample.discovery.CreateInventoryZoneForWindowsProbe
-```
+     ```sh
+     java -cp target/sample-1.0-SNAPSHOT-jar-with-dependencies.jar com.microfocus.ucmdb.rest.sample.discovery.CreateInventoryZoneForWindowsProbe
+     ```
 
 
-* Get communication log on trigger  
-    In this case, we will re-run a trigger of zone, wait until it finishes, then retrieve communication log.
+* Get communication log on trigger 
 
-    Run this command:
+  This use case shows how to re-run a trigger of zone, wait until it finishes, and then retrieve communication log.
 
-```sh
-java -cp target/sample-1.0-SNAPSHOT-jar-with-dependencies.jar com.microfocus.ucmdb.rest.sample.discovery.GetComlogOnTrigger
-```
+  From the project root folder on your local machine, run the following command:
+
+  ```sh
+  java -cp target/sample-1.0-SNAPSHOT-jar-with-dependencies.jar com.microfocus.ucmdb.rest.sample.discovery.GetComlogOnTrigger
+  ```
 
   
 
 * Get zone result  
-    In this case, we will activate a zone, then get the statistics and result of the zone.
 
-    Run this command:
+  This use case shows how to activate a zone, then get the statistics and result of the zone.
 
-```sh
-java -cp target/sample-1.0-SNAPSHOT-jar-with-dependencies.jar com.microfocus.ucmdb.rest.sample.discovery.GetZoneResult
-```
+  From the project root folder on your local machine, run the following command:
+
+  ```sh
+  java -cp target/sample-1.0-SNAPSHOT-jar-with-dependencies.jar com.microfocus.ucmdb.rest.sample.discovery.GetZoneResult
+  ```
 
   
 
 * Rerun failed triggers  
-    In this case, we will activate a zone, then rerun the trigger if status is error. 
 
-    Run this command:
+  This use case shows how to activate a zone, and then rerun the trigger if its status is Error. 
 
-```sh
-java -cp target/sample-1.0-SNAPSHOT-jar-with-dependencies.jar com.microfocus.ucmdb.rest.sample.discovery.RerunFailedTriggers
-```
+  From the project root folder on your local machine, run the following command:
 
-​    
+  ```sh
+  java -cp target/sample-1.0-SNAPSHOT-jar-with-dependencies.jar com.microfocus.ucmdb.rest.sample.discovery.RerunFailedTriggers
+  ```
+
+    
 
 * Delete zone  
-    In this case, we will delete a zone, if the used profile is not oob and only refered by this zone, also delete it.
-
-  Run this command:
   
-```sh
-java -cp target/sample-1.0-SNAPSHOT-jar-with-dependencies.jar com.microfocus.ucmdb.rest.sample.discovery.DeleteZoneWithAllReference
-```
+  This use case shows how to delete a zone, if the used profile is not out-of-the-box (OOTB) and is only referenced by this zone, also deletes it.
+
+  From the project root folder on your local machine, run the following command:
+  
+  ```sh
+  java -cp target/sample-1.0-SNAPSHOT-jar-with-dependencies.jar com.microfocus.ucmdb.rest.sample.discovery.DeleteZoneWithAllReference
+  ```
 
   
 
 ### Integration
+
 * Job sync  
-    This case is to run full sync and then delta sync of all jobs under inactive integration points.
-    First, we need to create an integration point with push and population jobs in it. But do not activate it immediately.
+
+  This use case runs full sync and then delta sync of all jobs under inactive integration points.
+  
+  1. Create an integration point that includes both push and population jobs in it. Do not activate it immediately.
+  
+  2. From the project root folder on your local machine, run the following command:
     
-    Run this command:
-    
-```sh
-java -cp target/sample-1.0-SNAPSHOT-jar-with-dependencies.jar com.microfocus.ucmdb.rest.sample.integration.JobSyncScenarioSample
-```
+     ```sh
+     java -cp target/sample-1.0-SNAPSHOT-jar-with-dependencies.jar com.microfocus.ucmdb.rest.sample.integration.JobSyncScenarioSample
+     ```
 
 
-​    
+
 * Troubleshooting  
-    This case is to perform a simple troubleshooting by getting connection status and job status.
+  
+  This use case performs a simple troubleshooting by getting connection status and job status.
     
-    Run this command:
-    
-```sh
-java -cp target/sample-1.0-SNAPSHOT-jar-with-dependencies.jar com.microfocus.ucmdb.rest.sample.integration.SimpleTroubleshootingScenarioSample
-```
+  From the project root folder on your local machine, run the following command:
+  
+  ```sh
+  java -cp target/sample-1.0-SNAPSHOT-jar-with-dependencies.jar com.microfocus.ucmdb.rest.sample.integration.SimpleTroubleshootingScenarioSample
+  ```
 
 
 ​    
 * Viewing CI statistics  
-    This case is to view the CI statistics for a specific job in a specific integration point.
+
+  This use case views CI statistics for a specific job in a specific integration point.
     
-    Run this command:
-    
-```sh
-java -cp target/sample-1.0-SNAPSHOT-jar-with-dependencies.jar com.microfocus.ucmdb.rest.sample.integration.ViewCIStatisticsScenarioSample
-```
+  From the project root folder on your local machine, run the following command:
+  
+  ```sh
+  java -cp target/sample-1.0-SNAPSHOT-jar-with-dependencies.jar com.microfocus.ucmdb.rest.sample.integration.ViewCIStatisticsScenarioSample
+  ```
 
 
 ​    
 * Viewing IntegrationPoints  
-    This case is to get the following information of specific sample points: status, statistics, details for each sample point. Then you can view the job list and status of each job.
+
+  This use case allows you to get the following information of specific sample points: status, statistics, details for each sample point. Then you can view the job  list and status of each job.
     
-    Run this command:
+  From the project root folder on your local machine, run the following command:
     
-```sh
-java -cp target/sample-1.0-SNAPSHOT-jar-with-dependencies.jar com.microfocus.ucmdb.rest.sample.integration.ViewIntegrationPointsScenarioSample
-```
+  ```sh
+  java -cp target/sample-1.0-SNAPSHOT-jar-with-dependencies.jar com.microfocus.ucmdb.rest.sample.integration.ViewIntegrationPointsScenarioSample
+  ```
 
 ​    
