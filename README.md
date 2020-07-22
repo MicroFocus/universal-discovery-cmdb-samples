@@ -17,7 +17,8 @@ This is a project for users who are using UCMDB and want to know how to manipula
 
 ## Install
 
-1. Prerequisite: This project requires JDK 1.8 (or later) and Maven 3. Make sure you already have them on your local machine. 
+1. Prerequisite: This project requires JDK 1.8 (or later) and Maven 3. 
+   Make sure you already have them on your local machine. 
 2. Clone the project so that you have a local copy. 
 3. Go to the project root folder on your local mahine, open Command Prompt and run the following command to build the project into a JAR file:
    ```sh
@@ -50,22 +51,35 @@ This example shows the easy usage of CMS REST API with a simple operation: Login
 
 ### Discovery
 * Create Zone for AWS Discovery  
+
   This use case shows how to create a zone for AWS discovery with REST API.  
+  
   1. Go to the project root folder on your local mahine, and open the following file: 
      data\payload\CreateAWSZone_1.json
+     
   2. Modify the AWS credential parameters' values as necessary, and save the file.
+  
   3. From the project root folder, run the following command:
+  
      ```sh
      java -cp target/sample-1.0-SNAPSHOT-jar-with-dependencies.jar com.microfocus.ucmdb.rest.sample.discovery.CreateAWSZone
      ```
   4. Provide necessary information when prompted.
+  
   5. When the sample code execution is completed, you should be able to see in the log what steps the sample has executed as well as execution result for each step: 
+  
      a. LOG IN TO SERVER
+     
      b. ENSURE ZONE BASED DISCOVERY IS ENABLED
+     
      c. CREATE AWS CREDENTIAL
+     
      d. CREATE AWS CREDENTIAL GROUP
+     
      e. CREATE AWS JOB GROUP
+     
      f. CERATE AWS ZONE
+     
   6. Go to the Discovery module in CMS UI, you should see an AWSZONE is created successfully.  
   
     
