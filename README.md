@@ -1,15 +1,15 @@
-# Sample Code for CMS REST API
+# Code samples for CMS REST API
 
 ## Table of Contents
 
-- [Background](#background)
+- [Introduction](#introduction)
 - [Install](#install)
 - [Usage](#usage)
 	- [Quick Start](#quick-start)
 	- [Discovery](#discovery)
 	- [Integration](#integration)
 
-## Background
+## Introduction
 
 This project provides CMS REST API code samples for UCMDB users who would like to perform zone-based discovery and integration through REST API. 
 
