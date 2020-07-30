@@ -12,10 +12,13 @@
 ## Introduction
 
 This project provides CMS REST API code samples for UCMDB users who would like to perform zone-based discovery and integration through REST API. 
+You can access CMS REST API documentation from one of the following:
+1. To view the interactive REST API Reference documentation, access CMS UI, and go to Help > REST API Reference.
+2. Visit CMS REST API Reference (https://docs.microfocus.com/UCMDB/2020.08/ucmdb-docs/docs/eng/APIs/UCMDB_RestAPI/index.html). 
 
 
 
-## Install
+## Set up the project
 
 1. Prerequisite: This project requires JDK 1.8 (or later) and Maven 3. 
    Make sure you already have them on your local machine. 
@@ -39,7 +42,7 @@ This section explains how to use CMS REST API code samples.
 
 In order to run the code samples properly, make sure you have enabled the new zone-based discovery solution in CMS UI.
 
-### Quick Start
+### Quick start
 
 This use case shows the easy usage of CMS REST API with a simple operation: Login. 
 
@@ -56,7 +59,7 @@ This use case shows the easy usage of CMS REST API with a simple operation: Logi
 ### Discovery
 * Create a zone for AWS Discovery  
 
-  This use case shows how to create a zone for AWS discovery with REST API.  
+  This sample case shows how to create a zone for AWS discovery with REST API.  
   
   1. Go to the project root folder on your local mahine, and open the following file: 
      data\payload\CreateAWSZone_1.json
@@ -90,7 +93,7 @@ This use case shows the easy usage of CMS REST API with a simple operation: Logi
 
 * Create a zone for Inventory Discovery  
 
-  This use case shows how to create a zone for inventory discovery on a Windows probe with REST API.
+  This sample case shows how to create a zone for inventory discovery on a Windows probe with REST API.
   
   1. Open each of the following files and modify values of zone configuration parameters as necessary:
 
@@ -109,7 +112,7 @@ This use case shows the easy usage of CMS REST API with a simple operation: Logi
 
 * Get communication log on trigger 
 
-  This use case shows how to re-run a trigger of zone, wait until it finishes, and then retrieve communication log.
+  This sample case shows how to re-run a trigger of zone, wait until it finishes, and then retrieve communication log.
 
   From the project root folder on your local machine, run the following command:
 
@@ -121,7 +124,7 @@ This use case shows the easy usage of CMS REST API with a simple operation: Logi
 
 * Get zone result  
 
-  This use case shows how to activate a zone, then get the statistics and result of the zone.
+  This sample case shows how to activate a zone, then get the statistics and result of the zone.
 
   From the project root folder on your local machine, run the following command:
 
@@ -133,7 +136,7 @@ This use case shows the easy usage of CMS REST API with a simple operation: Logi
 
 * Rerun failed triggers  
 
-  This use case shows how to activate a zone, and then rerun the trigger if its status is Error. 
+  This sample case shows how to activate a zone, and then rerun the trigger if its status is Error. 
 
   From the project root folder on your local machine, run the following command:
 
@@ -145,7 +148,7 @@ This use case shows the easy usage of CMS REST API with a simple operation: Logi
 
 * Delete a zone  
   
-  This use case shows how to delete a zone. If IP range group, schedule, credential group, or job group specified for the zone is not an out-of-the-box (OOTB) resource and is only referenced by this zone, also deletes it.
+  This sample case shows how to delete a zone. If IP range group, schedule, credential group, or job group specified for the zone is not an out-of-the-box (OOTB) resource and is only referenced by this zone, also deletes it.
 
   From the project root folder on your local machine, run the following command:
   
@@ -159,7 +162,7 @@ This use case shows the easy usage of CMS REST API with a simple operation: Logi
 
 * Job sync  
 
-  This use case runs full sync and then delta sync of all jobs under inactive integration points.
+  This sample case runs full sync and then delta sync of all jobs under inactive integration points.
   
   1. Create an integration point that includes both push and population jobs in it. Do not activate it immediately.
   
@@ -173,7 +176,7 @@ This use case shows the easy usage of CMS REST API with a simple operation: Logi
 
 * Troubleshooting  
   
-  This use case performs a simple troubleshooting by getting connection status and job status.
+  This sample case performs a simple troubleshooting by getting connection status and job status.
     
   From the project root folder on your local machine, run the following command:
   
@@ -185,7 +188,7 @@ This use case shows the easy usage of CMS REST API with a simple operation: Logi
 ​    
 * View CI statistics  
 
-  This use case views CI statistics for a specific job in a specific integration point.
+  This sample case views CI statistics for a specific job in a specific integration point.
     
   From the project root folder on your local machine, run the following command:
   
@@ -197,7 +200,7 @@ This use case shows the easy usage of CMS REST API with a simple operation: Logi
 ​    
 * View Integration Points  
 
-  This use case shows how to get the following information of specific integration points: status, statistics, details for each sample integration point. Then you can view the job list and status of each job.
+  This sample case shows how to get the following information of specific integration points: status, statistics, details for each sample integration point. Then you can view the job list and status of each job.
     
   From the project root folder on your local machine, run the following command:
     
