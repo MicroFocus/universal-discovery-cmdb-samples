@@ -14,8 +14,8 @@
 
 This project provides CMS REST API code samples for UCMDB users who would like to perform zone-based discovery and integration through REST API. 
 You can access CMS REST API documentation from one of the following:
-1. To view the interactive REST API Reference documentation from the product, access CMS UI, and go to **Help > REST API Reference**.
-2. Visit [CMS REST API Reference](https://docs.microfocus.com/UCMDB/2020.08/ucmdb-docs/docs/eng/APIs/UCMDB_RestAPI/index.html). 
+- To view the interactive REST API Reference documentation from the product, access CMS UI, and go to **Help > REST API Reference**.
+- Visit [CMS REST API Reference](https://docs.microfocus.com/UCMDB/2020.08/ucmdb-docs/docs/eng/APIs/UCMDB_RestAPI/index.html). 
 
 
 
