@@ -24,7 +24,7 @@ In a suite version, a further root context needs to be added, such as **/cms**�
 
 ## Set up the sample project
 
-1. Prerequisite: This project requires JDK 1.8 (or later) and Maven 3. 
+1. **Prerequisite:** This project requires JDK 1.8 (or later) and Maven 3. 
    Make sure you already have them on your local machine. 
    
 2. Clone the project so that you have a local copy. 
@@ -34,9 +34,9 @@ In a suite version, a further root context needs to be added, such as **/cms**�
    ```sh
    mvn package
    ```
-   When the building process completes, you should see the 'BUILD SUCCESS' message at the end.
+   When the building process completes, you should see the `BUILD SUCCESS` message at the end.
    
-4. Go to the 'target' folder, you should find the JAR file you just built.
+4. Go to the **target** folder, you should find the JAR file you just built.
 
 
 
@@ -56,17 +56,17 @@ This use case shows the easy usage of CMS REST API with a simple operation: Logi
    java -cp target/sample-1.0-SNAPSHOT-jar-with-dependencies.jar com.microfocus.ucmdb.rest.sample.quickstart.LogInToUCMDB
    ```
 2. Provide necessary information when prompted, for example, hostname/IP of the UCMDB server, port of the UCMDB server, username, and password.
-3. The response shows that the sample code has connected to the UCMDB server successfully, and you should see the 'LOG IN TO SERVER' as well as the token retured. 
-   Then you can need this token for REST API operations.
+3. The response shows that the sample code has connected to the UCMDB server successfully, and you should see the `LOG IN TO SERVER` message as well as the token retured. 
+   Then you can use this token for REST API operations.
 
 
 ### Discovery
-* Create a zone for AWS Discovery  
+* **Create a zone for AWS Discovery** 
 
   This sample case shows how to create a zone for AWS discovery with REST API.  
   
   1. Go to the project root folder on your local mahine, and open the following file: 
-     data\payload\CreateAWSZone_1.json
+     **data\payload\CreateAWSZone_1.json**
      
   2. Modify the AWS credential parameters' values as necessary, and save the file.
   
@@ -79,33 +79,33 @@ This use case shows the easy usage of CMS REST API with a simple operation: Logi
   
   5. When the sample code execution is completed, you should be able to see in the log what steps the sample has executed as well as execution result for each step: 
   
-     a. LOG IN TO SERVER
+     a. `LOG IN TO SERVER`
      
-     b. ENSURE ZONE BASED DISCOVERY IS ENABLED
+     b. `ENSURE ZONE BASED DISCOVERY IS ENABLED`
      
-     c. CREATE AWS CREDENTIAL
+     c. `CREATE AWS CREDENTIAL`
      
-     d. CREATE AWS CREDENTIAL GROUP
+     d. `CREATE AWS CREDENTIAL GROUP`
      
-     e. CREATE AWS JOB GROUP
+     e. `CREATE AWS JOB GROUP`
      
-     f. CERATE AWS ZONE
+     f. `CERATE AWS ZONE`
      
   6. Go to the Discovery module in CMS UI, you should see an AWSZONE is created successfully.  
   
     
 
-* Create a zone for Inventory Discovery  
+* **Create a zone for Inventory Discovery**
 
   This sample case shows how to create a zone for inventory discovery on a Windows probe with REST API.
   
   1. Open each of the following files and modify values of zone configuration parameters as necessary:
 
-     data\payload\CreateInventoryZoneForWindowsProbe_1.json - update the 'range' section
+     **data\payload\CreateInventoryZoneForWindowsProbe_1.json** - update the `range` section
 
-     data\payload\CreateInventoryZoneForWindowsProbe_2.json - update the 'ipRanges' section
+     **data\payload\CreateInventoryZoneForWindowsProbe_2.json** - update the `ipRanges` section
 
-     data\payload\CreateInventoryZoneForWindowsProbe_3.json - update the 'credential' section
+     **data\payload\CreateInventoryZoneForWindowsProbe_3.json** - update the `credential` section
 
   2. From the project root folder on your local machine, run the following command:
     
@@ -114,7 +114,7 @@ This use case shows the easy usage of CMS REST API with a simple operation: Logi
      ```
 
 
-* Get communication log on trigger 
+* **Get communication log on trigger**
 
   This sample case shows how to re-run a trigger of zone, wait until it finishes, and then retrieve communication log.
 
@@ -126,7 +126,7 @@ This use case shows the easy usage of CMS REST API with a simple operation: Logi
 
   
 
-* Get zone result  
+* **Get zone result**
 
   This sample case shows how to activate a zone, then get the statistics and result of the zone.
 
@@ -138,7 +138,7 @@ This use case shows the easy usage of CMS REST API with a simple operation: Logi
 
   
 
-* Rerun failed triggers  
+* **Rerun failed triggers**  
 
   This sample case shows how to activate a zone, and then rerun the trigger if its status is Error. 
 
@@ -150,7 +150,7 @@ This use case shows the easy usage of CMS REST API with a simple operation: Logi
 
     
 
-* Delete a zone  
+* **Delete a zone**
   
   This sample case shows how to delete a zone. If IP range group, schedule, credential group, or job group specified for the zone is not an out-of-the-box (OOTB) resource and is only referenced by this zone, also deletes it.
 
@@ -164,7 +164,7 @@ This use case shows the easy usage of CMS REST API with a simple operation: Logi
 
 ### Integration
 
-* Job sync  
+* **Job sync**
 
   This sample case runs full sync and then delta sync of all jobs under inactive integration points.
   
@@ -178,7 +178,7 @@ This use case shows the easy usage of CMS REST API with a simple operation: Logi
 
 
 
-* Troubleshooting  
+* **Troubleshooting**  
   
   This sample case performs a simple troubleshooting by getting connection status and job status.
     
@@ -190,7 +190,7 @@ This use case shows the easy usage of CMS REST API with a simple operation: Logi
 
 
 ​    
-* View CI statistics  
+* **View CI statistics**  
 
   This sample case views CI statistics for a specific job in a specific integration point.
     
@@ -202,7 +202,7 @@ This use case shows the easy usage of CMS REST API with a simple operation: Logi
 
 
 ​    
-* View Integration Points  
+* **View Integration Points** 
 
   This sample case shows how to get the following information of specific integration points: status, statistics, details for each sample integration point. Then you can view the job list and status of each job.
     
