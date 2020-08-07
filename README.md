@@ -15,10 +15,11 @@
 This project provides CMS REST API code samples for UCMDB users who would like to perform zone-based discovery and integration through REST API. 
 You can access CMS REST API documentation from one of the following:
 - To view the interactive REST API Reference documentation from the product, access CMS UI, and go to **Help > REST API Reference**.
-- Visit [CMS REST API Reference](https://docs.microfocus.com/UCMDB/2020.08/ucmdb-docs/docs/eng/APIs/UCMDB_RestAPI/index.html). 
+- To view the static REST API Reference documentation, go to [CMS REST API Reference](https://docs.microfocus.com/UCMDB/2020.08/ucmdb-docs/docs/eng/APIs/UCMDB_RestAPI/index.html). 
 
-**Note:** In a classic version of UCMDB, make sure you add **/rest-api** to the beginning of the URL, so that it becomes **/rest-api/authenticate**.
-In a suite version, a further root context needs to be added, such as **/cms** for the SMAX suite, which results in **/cms/rest-api/authenticate**.
+**Important:** 
+- In a classic version of UCMDB, make sure you add **/rest-api** to the beginning of the URL, so that it becomes **/rest-api/authenticate**.
+- In a suite version, a further root context needs to be added, such as **/cms** for the SMAX suite, which results in **/cms/rest-api/authenticate**.
 
 
 
