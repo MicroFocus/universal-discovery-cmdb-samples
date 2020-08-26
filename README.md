@@ -19,7 +19,9 @@ You can access CMS REST API documentation from one of the following:
 
 **Important:** 
 - In a classic version of UCMDB, make sure you add **/rest-api** to the beginning of the URL, so that it becomes **/rest-api/authenticate**.
-- In a suite version, a further root context needs to be added, such as **/cms** for the SMAX suite, which results in **/cms/rest-api/authenticate**.
+- In a suite version, make sure you add **/ucmdb-server/rest-api** to the beginning of the URL, so that it becomes **/ucmdb-server/rest-api/authenticate**. 
+
+  For SMAX suite, a further root context **/cms** needs to be added, which results in **/cms/ucmdb-server/rest-api/authenticate**.
 
 
 
