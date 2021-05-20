@@ -111,7 +111,8 @@ public class GetZoneResult {
         response = RestApiConnectionUtils.doGet(rootURL + "discovery/results/statistics?mzoneId=" + zonename ,
                 token, "GET ZONE STATISTICS.");
         ObjectMapper objectMapper = new ObjectMapper();
-        JsonNode node = objectMapper.readTree(response);
+        JsonNode rootNode = objectMapper.readTree(response);
+        JsonNode node = rootNode.get("items");
         for(JsonNode item : node){
             System.out.println(item);
         }

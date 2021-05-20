@@ -20,7 +20,6 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.microfocus.ucmdb.rest.sample.utils.RestApiConnectionUtils;
 
 import java.io.Console;
-import java.io.IOException;
 import java.net.URLEncoder;
 import java.util.HashSet;
 import java.util.Scanner;
