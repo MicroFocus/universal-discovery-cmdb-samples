@@ -40,7 +40,9 @@ import org.apache.http.client.methods.HttpEntityEnclosingRequestBase;
 import java.net.URI;
 public class RestApiConnectionUtils {
     public static final String MEDIA_TYPE_JSON = "application/json";
+    public static final String MEDIA_TYPE_OCTET_STREAM = "application/octet-stream";
     public static final String MEDIA_ALL = "*/*";
+
 
     public static final String TCP_PROTOCOL = "https://";
     public static final String CONTAINER_CONTEXT = "/ucmdb-server";
@@ -134,6 +136,17 @@ public class RestApiConnectionUtils {
         System.out.println(description);
         HttpPost httpPost = getPostRequest(url, token, MEDIA_TYPE_JSON, MEDIA_TYPE_JSON, content);
         String result = getResponseString(httpPost);
+        System.out.println(SPLITER);
+        System.out.println();
+        return result;
+    }
+
+    public static String downloadFile(String url, String token, String content, String description,String fileType) throws IOException {
+        System.out.println();
+        System.out.println(SPLITER);
+        System.out.println(description);
+        HttpPost httpPost = getPostRequest(url, token, MEDIA_TYPE_JSON, MEDIA_TYPE_OCTET_STREAM, content);
+        String result = storeFile(httpPost,fileType);
         System.out.println(SPLITER);
         System.out.println();
         return result;
@@ -383,5 +396,28 @@ public class RestApiConnectionUtils {
             close(httpResponse);
         }
         return result;
+    }
+    private static String storeFile(HttpRequestBase request,String fileType) {
+        CloseableHttpResponse httpResponse = null;
+        File targetFile = new File("Export_Data_"+System.currentTimeMillis()+"."+fileType);
+        try {
+            httpResponse = sendRequest(request);
+            InputStream resultStream=httpResponse.getEntity().getContent();
+            try (FileOutputStream outputStream = new FileOutputStream(targetFile, false)) {
+                int read;
+                byte[] bytes = new byte[1024];
+                while ((read = resultStream.read(bytes)) != -1) {
+                    outputStream.write(bytes, 0, read);
+                }
+            }
+            System.out.println("Returned a status code of " + printStatusCode(httpResponse.getStatusLine().getStatusCode()));
+            System.out.println("File stored at " + targetFile.getAbsolutePath());
+        } catch (Exception e) {
+            e.printStackTrace();
+            System.exit(-1);
+        } finally {
+            close(httpResponse);
+        }
+        return targetFile.getAbsolutePath();
     }
 }
