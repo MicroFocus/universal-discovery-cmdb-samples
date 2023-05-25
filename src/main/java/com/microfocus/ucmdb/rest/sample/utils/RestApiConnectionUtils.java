@@ -14,6 +14,7 @@
  * limitations under the License.
  */
 package com.microfocus.ucmdb.rest.sample.utils;
+
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.apache.http.HttpEntity;
@@ -27,17 +28,20 @@ import org.apache.http.impl.client.CloseableHttpClient;
 import org.apache.http.impl.client.HttpClients;
 import org.apache.http.ssl.SSLContexts;
 import org.apache.http.util.EntityUtils;
-import org.json.JSONException;
 import org.json.JSONObject;
 
-import javax.net.ssl.*;
+import javax.net.ssl.HostnameVerifier;
+import javax.net.ssl.SSLContext;
+import javax.net.ssl.SSLSession;
 import java.io.*;
+import java.net.URI;
 import java.security.KeyManagementException;
 import java.security.KeyStoreException;
 import java.security.NoSuchAlgorithmException;
 
-import org.apache.http.client.methods.HttpEntityEnclosingRequestBase;
-import java.net.URI;
+/**
+ * Copyright 2021-2023 Open Text
+ */
 public class RestApiConnectionUtils {
     public static final String MEDIA_TYPE_JSON = "application/json";
     public static final String MEDIA_TYPE_OCTET_STREAM = "application/octet-stream";
