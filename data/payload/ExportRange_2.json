@@ -1,14 +1,4 @@
 {
-	"selectedRanges": [
-		{
-			"probe": "P1",
-			"range": "2.1.1.2-2.1.1.4",
-			"isIncluded": false
-		},
-		{
-			"probe": "P1",
-			"range": "2.1.1.1-2.1.1.10",
-			"isIncluded": true
-		}
-	]
+	"domainNames": ["DefaultDomain"],
+	"probeNames": ["P1"]
 }

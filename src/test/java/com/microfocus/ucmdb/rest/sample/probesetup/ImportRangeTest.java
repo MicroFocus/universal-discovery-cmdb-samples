@@ -20,45 +20,13 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.microfocus.ucmdb.rest.sample.utils;
+package com.microfocus.ucmdb.rest.sample.probesetup;
 
-import java.io.BufferedReader;
-import java.io.File;
-import java.io.FileReader;
-import java.io.IOException;
+import org.junit.Test;
 
-public class PayloadUtils {
-    public static String contentFolder = "/data/payload/";
-
-    public static String loadContent(String contentName, int count) {
-        StringBuilder rlt = new StringBuilder();
-        File rootDirectory = new File("");
-        String path = rootDirectory.getAbsolutePath() + contentFolder;
-        File file = new File(path, contentName + "_" + count + ".json");
-        BufferedReader reader = null;
-        try {
-            reader = new BufferedReader(new FileReader(file));
-            String tempString = null;
-            int line = 1;
-            while ((tempString = reader.readLine()) != null) {
-                rlt.append(tempString);
-            }
-            reader.close();
-        } catch (IOException e) {
-            e.printStackTrace();
-        } finally {
-            if (reader != null) {
-                try {
-                    reader.close();
-                } catch (IOException e1) {
-                }
-            }
-        }
-        return rlt.toString();
-    }
-    public static File loadFile(String fileName) {
-        File rootDirectory = new File("");
-        String path = rootDirectory.getAbsolutePath() + contentFolder;
-        return new File(path, fileName);
+public class ImportRangeTest {
+    @Test
+    public void testMain() throws Exception {
+        ImportRange.main(new String[]{"10.164.82.131", "8443", "admin", "Admin_1234"});
     }
 }

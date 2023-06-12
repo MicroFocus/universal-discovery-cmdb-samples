@@ -11,9 +11,9 @@
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- *
- *     http://www.apache.org/licenses/LICENSE-2.0
- *
+ * <p>
+ * http://www.apache.org/licenses/LICENSE-2.0
+ * <p>
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -26,14 +26,16 @@ import com.microfocus.ucmdb.rest.sample.utils.PayloadUtils;
 import com.microfocus.ucmdb.rest.sample.utils.RestApiConnectionUtils;
 
 import java.io.Console;
+import java.io.File;
 import java.util.Scanner;
 
-public class ExportRange {
+public class ImportRange {
     private String rootURL;
 
-    public ExportRange(String rootURL) {
+    public ImportRange(String rootURL) {
         this.rootURL = rootURL;
     }
+
     public static void main(String[] args) throws Exception {
         String hostname;
         String port;
@@ -57,37 +59,22 @@ public class ExportRange {
             password = args[3];
         }
 
-        String rootURL = RestApiConnectionUtils.buildRootUrl(hostname, port,false);
+        String rootURL = RestApiConnectionUtils.buildRootUrl(hostname, port, false);
 
         // authenticate
         String token = RestApiConnectionUtils.loginServer(rootURL, username, password);
 
 
         // start the task
-        ExportRange task = new ExportRange(rootURL);
+        ImportRange task = new ImportRange(rootURL);
         task.execute(token);
     }
 
     private void execute(String token) throws Exception {
-        int count = 1;
-        String content = PayloadUtils.loadContent(this.getClass().getSimpleName(), count);
-        //export range and save as CSV
-        RestApiConnectionUtils.downloadFile(rootURL + "dataflowmanagement/ranges/export?exportType=CSV&exportScope=ALL", token, content, "Export range with ALL scope and save as CSV","CSV");
-        count ++;
-        //export range and save as PDF
-        content = PayloadUtils.loadContent(this.getClass().getSimpleName(), count);
-        RestApiConnectionUtils.downloadFile(rootURL + "dataflowmanagement/ranges/export?exportType=PDF&exportScope=ALL", token, content, "Export range with ALL scope and save as PDF","PDF");
-        count ++;
-        //export range and save as XSL
-        content = PayloadUtils.loadContent(this.getClass().getSimpleName(), count);
-        RestApiConnectionUtils.downloadFile(rootURL + "dataflowmanagement/ranges/export?exportType=XLS&exportScope=ALL", token, content, "Export range with ALL scope and save as XLS","XLS");
-        count ++;
-        //export range and save as XSLX
-        content = PayloadUtils.loadContent(this.getClass().getSimpleName(), count);
-        RestApiConnectionUtils.downloadFile(rootURL + "dataflowmanagement/ranges/export?exportType=XLSX&exportScope=ALL", token, content, "Export range with ALL scope and save as XLSX","XLSX");
-        //export selected range to CSV
-        count ++;
-        content = PayloadUtils.loadContent(this.getClass().getSimpleName(), count);
-        RestApiConnectionUtils.downloadFile(rootURL + "dataflowmanagement/ranges/export?exportType=CSV&exportScope=SELECTED", token, content, "Export range with SELECTED scope and save as CSV","CSV");
+        //Import range from CSV with allowOverlap true
+        File file= PayloadUtils.loadFile("Export_Data_1686548768110.CSV");
+        RestApiConnectionUtils.uploadFile(rootURL + "dataflowmanagement/ranges/import?allowOverlap=true&importType=CSV", token, "Import range from CSV with allowOverlap true",file);
+        //Import range from CSV with allowOverlap false
+        RestApiConnectionUtils.uploadFile(rootURL + "dataflowmanagement/ranges/import?allowOverlap=false&importType=CSV", token, "Import range from CSV with allowOverlap false",file);
     }
 }

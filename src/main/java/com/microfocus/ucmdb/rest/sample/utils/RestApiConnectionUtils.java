@@ -1,5 +1,5 @@
 /**
- * © Copyright 2011 - 2020 Micro Focus or one of its affiliates
+ * Copyright 2023 Open Text
  * The only warranties for products and services of Open Text and its affiliates and licensors (“Open Text”) are as may be set forth in the express warranty statements accompanying such products and services.
  * Nothing herein should be construed as constituting an additional warranty.
  * Open Text shall not be liable for technical or editorial errors or omissions contained herein.
@@ -42,6 +42,7 @@ import javax.net.ssl.SSLContext;
 import javax.net.ssl.SSLSession;
 import java.io.*;
 import java.net.URI;
+import java.nio.charset.Charset;
 import java.security.KeyManagementException;
 import java.security.KeyStoreException;
 import java.security.NoSuchAlgorithmException;
@@ -53,7 +54,7 @@ public class RestApiConnectionUtils {
     public static final String MEDIA_TYPE_JSON = "application/json";
     public static final String MEDIA_TYPE_OCTET_STREAM = "application/octet-stream";
     public static final String MEDIA_ALL = "*/*";
-
+    public static final String MEDIA_TYPE_MULTIPART_FORM_DATA = "multipart/form-data";
 
     public static final String TCP_PROTOCOL = "https://";
     public static final String CONTAINER_CONTEXT = "/ucmdb-server";
@@ -163,6 +164,23 @@ public class RestApiConnectionUtils {
         return result;
     }
 
+    public static String uploadFile(String url, String token,  String description, File file) throws IOException {
+        System.out.println();
+        System.out.println(SPLITER);
+        System.out.println(description);
+        System.out.println("file path is "+file.getAbsolutePath());
+        HttpPost httpPost = getPostRequest(url, token, MEDIA_TYPE_MULTIPART_FORM_DATA, MEDIA_TYPE_JSON, null);
+        String boundary = "--------------4585696313564699";
+        httpPost.setHeader("Content-Type", "multipart/form-data; boundary=" + boundary);
+        MultipartEntityBuilder builder = MultipartEntityBuilder.create();
+        builder.setCharset(Charset.forName("UTF-8")).setBoundary(boundary).addBinaryBody("file", file);
+        HttpEntity entity = builder.build();
+        httpPost.setEntity(entity);
+        String result = getResponseString(httpPost);
+        System.out.println(SPLITER);
+        System.out.println();
+        return result;
+    }
     public static String doGet(String url, String token, String description) {
         System.out.println();
         System.out.println(SPLITER);
