@@ -27,6 +27,6 @@ import org.junit.Test;
 public class ImportRangeTest {
     @Test
     public void testMain() throws Exception {
-        ImportRange.main(new String[]{"10.164.82.131", "8443", "admin", "Admin_1234"});
+        ImportRange.main(new String[]{"${UCMDB_IP_ADDRESS}", "${UCMDB_PORT}", "${UCMDB_USERNAME}", "${UCMDB_PASSWORD}"});
     }
 }
