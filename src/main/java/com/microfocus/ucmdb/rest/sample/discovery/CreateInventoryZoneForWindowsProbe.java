@@ -21,6 +21,7 @@ import com.fasterxml.jackson.databind.node.ObjectNode;
 import com.microfocus.ucmdb.rest.sample.utils.PayloadUtils;
 import com.microfocus.ucmdb.rest.sample.utils.RestApiConnectionUtils;
 
+import java.io.CharArrayReader;
 import java.io.Console;
 import java.io.IOException;
 import java.util.Scanner;
@@ -35,8 +36,7 @@ public class CreateInventoryZoneForWindowsProbe {
         String hostname;
         String port;
         String username;
-        String password;
-        String credentialPassword;
+        char[] password;
 
         if (args.length < 5) {
             Scanner sc = new Scanner(System.in);
@@ -47,14 +47,12 @@ public class CreateInventoryZoneForWindowsProbe {
             System.out.print("Please enter username for UCMDB: ");
             username = sc.hasNext() ? sc.next() : "";
             Console console = System.console();
-            password = new String(console.readPassword("Please enter password for UCMDB: "));
-            credentialPassword = new String(console.readPassword("Please enter password for credential: "));
+            password = console.readPassword("Please enter password for UCMDB: ");
         } else {
             hostname = args[0];
             port = args[1];
             username = args[2];
-            password = args[3];
-            credentialPassword = args[4];
+            password = args[3].toCharArray();
         }
 
         String rootURL = RestApiConnectionUtils.buildRootUrl(hostname, port,false);
@@ -64,10 +62,10 @@ public class CreateInventoryZoneForWindowsProbe {
 
         // start the task
         CreateInventoryZoneForWindowsProbe task = new CreateInventoryZoneForWindowsProbe(rootURL);
-        task.execute(token, credentialPassword);
+        task.execute(token);
     }
 
-    private void execute(String token, String credentialPassword) throws Exception {
+    private void execute(String token) throws Exception {
         // check if new UI backend enabled
         RestApiConnectionUtils.ensureZoneBasedDiscoveryIsEnabled(rootURL, token);
 
@@ -85,17 +83,14 @@ public class CreateInventoryZoneForWindowsProbe {
         // create NTCMD credential
         content = PayloadUtils.loadContent(this.getClass().getSimpleName(), count);
         count ++;
-        ObjectMapper objectMapper = new ObjectMapper();
-        JsonNode o = objectMapper.readValue(content, JsonNode.class);
-        ((ObjectNode)o).put("protocol_password", credentialPassword);
-        String credentialId = RestApiConnectionUtils.doPost(rootURL + "dataflowmanagement/credentials", token, o.toString(), "CREATE NTCMD CREADENTIAL.");
+        String credentialId = RestApiConnectionUtils.doPost(rootURL + "dataflowmanagement/credentials", token, content, "CREATE NTCMD CREADENTIAL.");
         credentialId = credentialId.substring(1,credentialId.length() - 1);
 
         // create Inventory credential group
         content = PayloadUtils.loadContent(this.getClass().getSimpleName(), count);
         count ++;
-        objectMapper = new ObjectMapper();
-        o = objectMapper.readValue(content, JsonNode.class);
+        ObjectMapper objectMapper = new ObjectMapper();
+        JsonNode o = objectMapper.readValue(content, JsonNode.class);
         ((ObjectNode)o.get("credentials").get(0).get("protocols")).putArray("ntadminprotocol").add(credentialId);
         RestApiConnectionUtils.doPost(rootURL + "discovery/credentialprofiles", token, o.toString(), "CREATE CREADENTIAL GROUP.");
 

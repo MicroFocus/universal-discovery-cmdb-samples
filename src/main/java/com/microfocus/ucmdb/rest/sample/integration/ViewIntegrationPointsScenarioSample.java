@@ -27,7 +27,7 @@ public class ViewIntegrationPointsScenarioSample {
         String hostname;
         String port;
         String username;
-        String password;
+        char[] password;
         String integrationPointName;
 
         if (args.length < 5) {
@@ -39,14 +39,14 @@ public class ViewIntegrationPointsScenarioSample {
             System.out.print("Please enter username for UCMDB: ");
             username = sc.hasNext() ? sc.next() : "";
             Console console = System.console();
-            password = new String(console.readPassword("Please enter password for UCMDB: "));
+            password = console.readPassword("Please enter password for UCMDB: ");
             System.out.print("Please enter integration point name: ");
             integrationPointName = sc.hasNext() ? sc.next() : "";
         } else {
             hostname = args[0];
             port = args[1];
             username = args[2];
-            password = args[3];
+            password = args[3].toCharArray();
             integrationPointName = args[4];
         }
 

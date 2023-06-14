@@ -37,7 +37,7 @@ public class RerunFailedTriggers {
         String hostname;
         String port;
         String username;
-        String password;
+        char[] password;
         String zonename;
 
         if (args.length < 5) {
@@ -49,14 +49,14 @@ public class RerunFailedTriggers {
             System.out.print("Please enter username for UCMDB: ");
             username = sc.hasNext() ? sc.next() : "";
             Console console = System.console();
-            password = new String(console.readPassword("Please enter password for UCMDB: "));
+            password = console.readPassword("Please enter password for UCMDB: ");
             System.out.print("Please enter zonename: ");
             zonename = sc.hasNext() ? sc.next() : "";
         } else {
             hostname = args[0];
             port = args[1];
             username = args[2];
-            password = args[3];
+            password = args[3].toCharArray();
             zonename = args[4];
         }
 

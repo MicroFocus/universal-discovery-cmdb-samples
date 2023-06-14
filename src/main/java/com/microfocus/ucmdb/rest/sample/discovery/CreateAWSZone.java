@@ -23,6 +23,7 @@ import com.microfocus.ucmdb.rest.sample.utils.RestApiConnectionUtils;
 
 import java.io.Console;
 import java.io.IOException;
+import java.util.Arrays;
 import java.util.Scanner;
 
 public class CreateAWSZone {
@@ -35,7 +36,7 @@ public class CreateAWSZone {
         String hostname;
         String port;
         String username;
-        String password;
+        char[] password;
 
         if (args.length < 4) {
             Scanner sc = new Scanner(System.in);
@@ -46,19 +47,18 @@ public class CreateAWSZone {
             System.out.print("Please enter username for UCMDB: ");
             username = sc.hasNext() ? sc.next() : "";
             Console console = System.console();
-            password = new String(console.readPassword("Please enter password for UCMDB: "));
+            password = console.readPassword("Please enter password for UCMDB: ");
         } else {
             hostname = args[0];
             port = args[1];
             username = args[2];
-            password = args[3];
+            password = args[3].toCharArray();
         }
 
         String rootURL = RestApiConnectionUtils.buildRootUrl(hostname, port,false);
 
         // authenticate
         String token = RestApiConnectionUtils.loginServer(rootURL, username, password);
-
 
         // start the task
         CreateAWSZone task = new CreateAWSZone(rootURL);

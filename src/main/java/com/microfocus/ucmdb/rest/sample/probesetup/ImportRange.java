@@ -40,7 +40,7 @@ public class ImportRange {
         String hostname;
         String port;
         String username;
-        String password;
+        char[] password;
 
         if (args.length < 4) {
             Scanner sc = new Scanner(System.in);
@@ -51,12 +51,12 @@ public class ImportRange {
             System.out.print("Please enter username for UCMDB: ");
             username = sc.hasNext() ? sc.next() : "";
             Console console = System.console();
-            password = new String(console.readPassword("Please enter password for UCMDB: "));
+            password = console.readPassword("Please enter password for UCMDB: ");
         } else {
             hostname = args[0];
             port = args[1];
             username = args[2];
-            password = args[3];
+            password = args[3].toCharArray();
         }
 
         String rootURL = RestApiConnectionUtils.buildRootUrl(hostname, port, false);

@@ -46,6 +46,7 @@ import java.nio.charset.Charset;
 import java.security.KeyManagementException;
 import java.security.KeyStoreException;
 import java.security.NoSuchAlgorithmException;
+import java.util.Arrays;
 
 /**
  * Copyright 2021-2023 Open Text
@@ -91,9 +92,9 @@ public class RestApiConnectionUtils {
         return TCP_PROTOCOL + serverIP + ":" + port + (isContainerized ? CONTAINER_CONTEXT : "") + URI_PREFIX;
     }
 
-    public static String loginServer(String url, String userName, String password) throws IOException {
+    public static String loginServer(String url, String userName, char[] password) throws IOException {
         //HTTPS protocol, server IP and API type as the prefix of REST API URL.
-        if(url == null || url.length() == 0 || userName == null || userName.length() == 0 || password == null || password.length()== 0){
+        if(url == null || url.length() == 0 || userName == null || userName.length() == 0 || password == null || password.length== 0){
             System.out.println("Please input correct url or userName or password!");
             return null;
         }
@@ -120,6 +121,8 @@ public class RestApiConnectionUtils {
         if (token != null) {
             System.out.println("Connect to server Successfully!");
         }
+
+        Arrays.fill(password, ' ');
         return token;
     }
 
