@@ -71,10 +71,10 @@ public class ImportRange {
     }
 
     private void execute(String token) throws Exception {
-        //Import range from CSV with allowOverlap true
+        //Import ranges from CSV with allowOverlap true
         File file= PayloadUtils.loadFile("Export_Data_1686548768110.CSV");
         RestApiConnectionUtils.uploadFile(rootURL + "dataflowmanagement/ranges/import?allowOverlap=true&importType=CSV", token, "Import range from CSV with allowOverlap true",file);
-        //Import range from CSV with allowOverlap false
+        //Import ranges from CSV with allowOverlap false
         RestApiConnectionUtils.uploadFile(rootURL + "dataflowmanagement/ranges/import?allowOverlap=false&importType=CSV", token, "Import range from CSV with allowOverlap false",file);
     }
 }
