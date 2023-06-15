@@ -39,9 +39,6 @@ public class DeployPackage {
             port = sc.hasNext() ? sc.next() : "";
             System.out.print("Please enter username for UCMDB: ");
             username = sc.hasNext() ? sc.next() : "";
-
-/*            System.out.print("Please enter password for UCMDB: ");
-            password = sc.hasNext() ? sc.next() : "";*/
             Console console = System.console();
             password = new String(console.readPassword("Please enter password for UCMDB: "));
             System.out.print("Please enter the absolute path of the package you want to deploy: ");
@@ -57,7 +54,7 @@ public class DeployPackage {
         String rootURL = RestApiConnectionUtils.buildRootUrl(hostname, port,false);
 
         // authenticate
-        String token = RestApiConnectionUtils.loginServer(rootURL, username, password);
+        String token = RestApiConnectionUtils.loginServer(rootURL, username, password.toCharArray());
 
         DeployPackage deployPackage = new DeployPackage(rootURL, packagePath);
         deployPackage.execute(token);
@@ -101,10 +98,13 @@ public class DeployPackage {
             String response = RestApiConnectionUtils.doGet(rootURL + "packagemanager/packages/" + fileName + "/progress", token, "GET PACKAGE DEPLOYMENT PROGRESS");
             ObjectMapper objectMapper = new ObjectMapper();
             JsonNode node = objectMapper.readValue(response, JsonNode.class);
-            //INIT, IN-PROGRESS, FINISHED
+            //INIT, IN-PROGRESS, FINISHED, FAILED
             if (node.get("status").asText().equals("FINISHED")) {
                 isNotFinished = false;
                 System.out.println("Deploy package finished");
+            } else if (node.get("status").asText().equals("FINISHED")) {
+                isNotFinished = false;
+                System.out.println("Deploy package failed");
             }
             Thread.sleep(3000);
         }
