@@ -71,23 +71,23 @@ public class ExportRange {
     private void execute(String token) throws Exception {
         int count = 1;
         String content = PayloadUtils.loadContent(this.getClass().getSimpleName(), count);
-        //export range and save as CSV
-        RestApiConnectionUtils.downloadFile(rootURL + "dataflowmanagement/ranges/export?exportType=CSV&exportScope=ALL", token, content, "Export range with ALL scope and save as CSV","CSV");
+        //Export ALL ranges and save as CSV
+        RestApiConnectionUtils.downloadFile(rootURL + "dataflowmanagement/ranges/export?exportType=CSV&exportScope=ALL", token, content, "Export ALL ranges and save as CSV","CSV");
         count ++;
-        //export range and save as PDF
+        //Export ALL ranges and save as PDF
         content = PayloadUtils.loadContent(this.getClass().getSimpleName(), count);
-        RestApiConnectionUtils.downloadFile(rootURL + "dataflowmanagement/ranges/export?exportType=PDF&exportScope=ALL", token, content, "Export range with ALL scope and save as PDF","PDF");
+        RestApiConnectionUtils.downloadFile(rootURL + "dataflowmanagement/ranges/export?exportType=PDF&exportScope=ALL", token, content, "Export ALL ranges and save as PDF","PDF");
         count ++;
-        //export range and save as XSL
+        //Export ALL ranges and save as XLS
         content = PayloadUtils.loadContent(this.getClass().getSimpleName(), count);
-        RestApiConnectionUtils.downloadFile(rootURL + "dataflowmanagement/ranges/export?exportType=XLS&exportScope=ALL", token, content, "Export range with ALL scope and save as XLS","XLS");
+        RestApiConnectionUtils.downloadFile(rootURL + "dataflowmanagement/ranges/export?exportType=XLS&exportScope=ALL", token, content, "Export ALL ranges and save as XLS","XLS");
         count ++;
-        //export range and save as XSLX
+        //Export ALL ranges and save as XLSX
         content = PayloadUtils.loadContent(this.getClass().getSimpleName(), count);
-        RestApiConnectionUtils.downloadFile(rootURL + "dataflowmanagement/ranges/export?exportType=XLSX&exportScope=ALL", token, content, "Export range with ALL scope and save as XLSX","XLSX");
-        //export selected range to CSV
+        RestApiConnectionUtils.downloadFile(rootURL + "dataflowmanagement/ranges/export?exportType=XLSX&exportScope=ALL", token, content, "Export ALL ranges and save as XLSX","XLSX");
+        //Export SELECTED ranges and save as CSV
         count ++;
         content = PayloadUtils.loadContent(this.getClass().getSimpleName(), count);
-        RestApiConnectionUtils.downloadFile(rootURL + "dataflowmanagement/ranges/export?exportType=CSV&exportScope=SELECTED", token, content, "Export range with SELECTED scope and save as CSV","CSV");
+        RestApiConnectionUtils.downloadFile(rootURL + "dataflowmanagement/ranges/export?exportType=CSV&exportScope=SELECTED", token, content, "Export SELECTED ranges and save as CSV","CSV");
     }
 }
