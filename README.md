@@ -281,6 +281,27 @@ This use case shows the easy usage of CMS REST API with a simple operation: Logi
      In step b, the range import will succeed anyway, as overlapping ranges (if any) will be ignored and other ranges can be properly imported.       
      In step c, the range import will fail if there is any range overlap with the existing ranges in UCMDB. 
   6. Then login CMS UI, you should see ranges have been imported to your specified domains and probes.  
+​
+* **Define the network scope for the credential**
+
+  This sample case shows how to define the network scope for the credential.
+
+    1. Go to the project root folder on your local mahine, and open the following file:
+       **data\payload\NetworkScopeConfigurationForCredential_1.json**  is a request payload example which to define the network scope (range level) for the credential.
+       **data\payload\NetworkScopeConfigurationForCredential_2.json**  is a request payload example which to disable the network scope (probe level) for the credential.
+       **data\payload\NetworkScopeConfigurationForCredential_3.json**  is a request payload example which to define the network scope (probe level) for the credential.
+       **data\payload\NetworkScopeConfigurationForCredential_4.json**  is a request payload example which to define the network scope (both probe level and range level) for the credential.
+
+    2. Modify the protocol_netaddress' value and domainName' value as necessary, and save the file.
+
+    3. From the project root folder, run the following command:
+
+       ```sh
+       java -cp target/sample-1.0-SNAPSHOT-jar-with-dependencies.jar com.microfocus.ucmdb.rest.sample.probesetup.NetworkScopeConfigurationForCredential
+       ```
+    4. Provide necessary information when prompted.
+
+    5. Go to the credential page in CMS UI, you should see a credential with defined the network scope is created successfully.
     
 ## Disclamer update
 
