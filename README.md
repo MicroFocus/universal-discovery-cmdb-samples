@@ -8,7 +8,7 @@
 	- [Quick Start](#quick-start)
 	- [Discovery](#discovery)
 	- [Integration](#integration)
-	- [Probesetup](#probesetup)
+	- [Probe Setup](#probesetup)
 - [Disclamer update](#disclamer-update)
 
 ## Introduction
@@ -216,7 +216,7 @@ This use case shows the easy usage of CMS REST API with a simple operation: Logi
   java -cp target/sample-1.0-SNAPSHOT-jar-with-dependencies.jar com.microfocus.ucmdb.rest.sample.integration.ViewIntegrationPointsScenarioSample
   ```
 
-### Probesetup
+### Probe Setup
 * **Export Ranges** 
 
   This sample case shows how to export ranges.  
