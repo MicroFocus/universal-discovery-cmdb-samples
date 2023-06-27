@@ -193,7 +193,7 @@ This use case shows the easy usage of CMS REST API with a simple operation: Logi
   ```
 
 
-​    
+
 * **View CI statistics**  
 
   This sample case views CI statistics for a specific job in a specific integration point.
@@ -205,7 +205,7 @@ This use case shows the easy usage of CMS REST API with a simple operation: Logi
   ```
 
 
-​    
+
 * **View Integration Points** 
 
   This sample case shows how to get the following information of specific integration points: status, statistics, details for each sample integration point. Then you can view the job list and status of each job.
@@ -252,7 +252,7 @@ This use case shows the easy usage of CMS REST API with a simple operation: Logi
      f. `Export SELECTED ranges and save as CSV`
      
   6. In the log , you will also see which folder is file stored at , and go to the folder, you should see these exported files.  
-​
+
 
 * **Import Ranges** 
 
@@ -281,7 +281,7 @@ This use case shows the easy usage of CMS REST API with a simple operation: Logi
      In step b, the range import will succeed anyway, as overlapping ranges (if any) will be ignored and other ranges can be properly imported.       
      In step c, the range import will fail if there is any range overlap with the existing ranges in UCMDB. 
   6. Then login CMS UI, you should see ranges have been imported to your specified domains and probes.  
-​
+
 * **Define the network scope for the credential**
 
   This sample case shows how to define the network scope for the credential.
@@ -302,7 +302,3 @@ This use case shows the easy usage of CMS REST API with a simple operation: Logi
     4. Provide necessary information when prompted.
 
     5. Go to the credential page in CMS UI, you should see a credential with defined the network scope is created successfully.
-    
-## Disclamer update
-
-Certain versions of software accessible here may contain branding from Hewlett-Packard Company (now HP Inc.) and Hewlett Packard Enterprise Company.  As of September 1, 2017, the software is now offered by Micro Focus, a separately owned and operated company.  Any reference to the HP and Hewlett Packard Enterprise/HPE marks is historical in nature, and the HP and Hewlett Packard Enterprise/HPE marks are the property of their respective owners.
