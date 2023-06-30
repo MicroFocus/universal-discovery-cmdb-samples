@@ -9,7 +9,6 @@
 	- [Discovery](#discovery)
 	- [Integration](#integration)
 	- [Probesetup](#probesetup)
-- [Disclamer update](#disclamer-update)
 
 ## Introduction
 
