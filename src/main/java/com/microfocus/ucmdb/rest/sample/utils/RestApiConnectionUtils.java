@@ -46,7 +46,9 @@ import java.nio.charset.Charset;
 import java.security.KeyManagementException;
 import java.security.KeyStoreException;
 import java.security.NoSuchAlgorithmException;
+import java.text.SimpleDateFormat;
 import java.util.Arrays;
+import java.util.Date;
 
 /**
  * Copyright 2021-2023 Open Text
@@ -161,10 +163,21 @@ public class RestApiConnectionUtils {
         System.out.println(SPLITER);
         System.out.println(description);
         HttpPost httpPost = getPostRequest(url, token, MEDIA_TYPE_JSON, MEDIA_TYPE_OCTET_STREAM, content);
-        String result = storeFile(httpPost,fileType);
+        String result = storeFile(httpPost,"Export_Data_"+System.currentTimeMillis()+"."+fileType);
         System.out.println(SPLITER);
         System.out.println();
         return result;
+    }
+
+    public static void exportFile(String url, String token, String content, String description) throws UnsupportedEncodingException {
+        System.out.println();
+        System.out.println(SPLITER);
+        System.out.println(description);
+        HttpPost httpPost = getPostRequest(url, token, MEDIA_TYPE_JSON, MEDIA_TYPE_JSON, content);
+        SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd_hh-mm-ss");
+        storeFile(httpPost, "discovery_resources_" + df.format(new Date()) + ".json");
+        System.out.println(SPLITER);
+        System.out.println();
     }
 
     public static String uploadFile(String url, String token,  String description, File file) throws IOException {
@@ -429,9 +442,9 @@ public class RestApiConnectionUtils {
         }
         return result;
     }
-    private static String storeFile(HttpRequestBase request,String fileType) {
+    private static String storeFile(HttpRequestBase request,String fileName) {
         CloseableHttpResponse httpResponse = null;
-        File targetFile = new File("Export_Data_"+System.currentTimeMillis()+"."+fileType);
+        File targetFile = new File(fileName);
         try {
             httpResponse = sendRequest(request);
             InputStream resultStream=httpResponse.getEntity().getContent();
