@@ -92,9 +92,9 @@ public class RestApiConnectionUtils {
         return TCP_PROTOCOL + serverIP + ":" + port + (isContainerized ? CONTAINER_CONTEXT : "") + URI_PREFIX;
     }
 
-    public static String loginServer(String url, String userName, char[] password) throws IOException {
+    public static String loginServer(String url, String userName, char[] plainPwd) throws IOException {
         //HTTPS protocol, server IP and API type as the prefix of REST API URL.
-        if(url == null || url.length() == 0 || userName == null || userName.length() == 0 || password == null || password.length== 0){
+        if(url == null || url.length() == 0 || userName == null || userName.length() == 0 || plainPwd == null || plainPwd.length== 0){
             System.out.println("Please input correct url or userName or password!");
             return null;
         }
@@ -103,7 +103,7 @@ public class RestApiConnectionUtils {
         JSONObject loginJson = new JSONObject();
         loginJson.put("clientContext","1");
         loginJson.put("username",userName);
-        loginJson.put("password",password);
+        loginJson.put("password",new String(plainPwd));
 
         //Put username and password in HTTP request body and invoke REST API(rest-api/authenticate) with POST method to get token.
         String result = doPost(url + "authenticate", null, loginJson.toString(), "LOG IN TO SERVER.");
@@ -122,7 +122,7 @@ public class RestApiConnectionUtils {
             System.out.println("Connect to server Successfully!");
         }
 
-        Arrays.fill(password, ' ');
+        Arrays.fill(plainPwd, ' ');
         return token;
     }
 
