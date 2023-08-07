@@ -2,5 +2,6 @@
 	"domainNames": ["DefaultDomain"],
 	"probeNames": ["P1"],
 	"rangeTypes": ["0"],
-	"groupNames": ["g1"]
+	"groupNames": ["g1"],
+	"queriedIpAddress": "1."
 }

@@ -444,9 +444,16 @@ public class RestApiConnectionUtils {
     }
     private static String storeFile(HttpRequestBase request,String fileName) {
         CloseableHttpResponse httpResponse = null;
-        File targetFile = new File(fileName);
+        File targetFile = null;
         try {
             httpResponse = sendRequest(request);
+            if (httpResponse.getHeaders("Content-Disposition") != null && httpResponse.getHeaders("Content-Disposition")[0] != null) {
+                String fileNameFromResponse = httpResponse.getHeaders("Content-Disposition")[0].toString();
+                if (fileNameFromResponse.split("filename=").length == 2) {
+                    fileName = fileNameFromResponse.split("filename=")[1];
+                }
+            }
+            targetFile = new File(fileName);
             InputStream resultStream=httpResponse.getEntity().getContent();
             try (FileOutputStream outputStream = new FileOutputStream(targetFile, false)) {
                 int read;
