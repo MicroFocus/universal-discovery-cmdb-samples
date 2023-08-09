@@ -56,7 +56,7 @@ public class ExportDiscoveryConfiguration {
         //Export credentials without encrypted
         RestApiConnectionUtils.exportFile(rootURL + "discoveryintegration/export?categories=CREDENTIAL&format=JSON&isEncrypted=false", token, content, "Export credentials without encrypted");
         //Export credentials with encrypted
-        RestApiConnectionUtils.exportFile(rootURL + "discoveryintegration/export?categories=CREDENTIAL&format=JSON&isEncrypted=true&password=Admin_1234", token, content, "Export credentials without encrypted");
+        RestApiConnectionUtils.exportFile(rootURL + "discoveryintegration/export?categories=CREDENTIAL&format=JSON&isEncrypted=true&password=Admin_1234", token, content, "Export credentials with encrypted");
         //Export IP ranges and credentials without encrypted
         RestApiConnectionUtils.exportFile(rootURL + "discoveryintegration/export?categories=IP_RANGE&categories=CREDENTIAL&format=JSON&isEncrypted=false", token, content, "Export IP ranges and credentials without encrypted");
         //Export all discovery resources with encrypted
