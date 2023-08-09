@@ -1,5 +1,5 @@
 /**
- * Copyright 2023 Open Text
+ * Copyright 2020 - 2023 Open Text
  * The only warranties for products and services of Open Text and its
  * affiliates and licensors ("Open Text") are as may be set forth in the
  * express warranty statements accompanying such products and services.
