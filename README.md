@@ -116,6 +116,16 @@ This use case shows the easy usage of CMS REST API with a simple operation: Logi
      java -cp target/sample-1.0-SNAPSHOT-jar-with-dependencies.jar com.microfocus.ucmdb.rest.sample.discovery.CreateInventoryZoneForWindowsProbe
      ```
 
+* **Copy a zone from an existing zone for TroubleShooting**
+
+  This sample case shows how to copy a zone for troubleshooting.
+
+  1. From the project root folder on your local machine, run the following command:
+     ```sh
+     java -cp target/sample-1.0-SNAPSHOT-jar-with-dependencies.jar com.microfocus.ucmdb.rest.sample.discovery.CopyZone
+     ```
+     It will copy a new zone from existing AWSZone, there is an example, you can use any existing zone id here.
+  
 
 * **Get communication log on trigger**
 
