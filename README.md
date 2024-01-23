@@ -116,7 +116,7 @@ This use case shows the easy usage of CMS REST API with a simple operation: Logi
      java -cp target/sample-1.0-SNAPSHOT-jar-with-dependencies.jar com.microfocus.ucmdb.rest.sample.discovery.CreateInventoryZoneForWindowsProbe
      ```
 
-* **Copy a zone from an existing zone for TroubleShooting**
+* **Copy a zone from an existing zone for troubleshooting**
 
   This sample case shows how to copy a zone for troubleshooting.
 
