@@ -24,11 +24,11 @@ package com.microfocus.ucmdb.rest.sample.discovery;
 
 import org.junit.Test;
 
-public class GetZoneResultTest { 
+public class CopyZoneTest {
 
     @Test
     public void testMain() throws Exception {
-        GetZoneResult.main(new String[]{"${UCMDB_IP_ADDRESS}", "${UCMDB_PORT}", "${UCMDB_USERNAME}", "${UCMDB_PASSWORD}", "${ZONE_NAME}"});
+        CopyZone.main(new String[]{"${UCMDB_IP_ADDRESS}", "${UCMDB_PORT}", "${UCMDB_USERNAME}", "${UCMDB_PASSWORD}"});
     }
 
 } 

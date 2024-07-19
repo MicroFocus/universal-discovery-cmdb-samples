@@ -1,5 +1,6 @@
 {
 	"protocol_username": "administrator",
+	"protocol_password": "passw0rd",
 	"domainName": "DefaultDomain",
 	"credentialType": "ntadminprotocol"
 }

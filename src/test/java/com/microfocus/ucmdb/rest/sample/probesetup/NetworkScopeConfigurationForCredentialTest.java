@@ -20,15 +20,13 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.microfocus.ucmdb.rest.sample.discovery;
+package com.microfocus.ucmdb.rest.sample.probesetup;
 
 import org.junit.Test;
 
-public class GetZoneResultTest { 
-
+public class NetworkScopeConfigurationForCredentialTest{
     @Test
-    public void testMain() throws Exception {
-        GetZoneResult.main(new String[]{"${UCMDB_IP_ADDRESS}", "${UCMDB_PORT}", "${UCMDB_USERNAME}", "${UCMDB_PASSWORD}", "${ZONE_NAME}"});
+    public void testMain() throws Exception{
+        NetworkScopeConfigurationForCredential.main(new String[]{"${UCMDB_IP_ADDRESS}", "${UCMDB_PORT}", "${UCMDB_USERNAME}", "${UCMDB_PASSWORD}"});
     }
-
-} 
+}

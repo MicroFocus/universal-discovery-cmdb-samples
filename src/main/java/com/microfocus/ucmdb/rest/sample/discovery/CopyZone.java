@@ -20,18 +20,17 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.microfocus.ucmdb.rest.sample.probesetup;
+package com.microfocus.ucmdb.rest.sample.discovery;
 
-import com.microfocus.ucmdb.rest.sample.utils.PayloadUtils;
 import com.microfocus.ucmdb.rest.sample.utils.RestApiConnectionUtils;
 
 import java.io.Console;
 import java.util.Scanner;
 
-public class ExportRange {
+public class CopyZone {
     private String rootURL;
 
-    public ExportRange(String rootURL) {
+    public CopyZone(String rootURL) {
         this.rootURL = rootURL;
     }
     public static void main(String[] args) throws Exception {
@@ -62,32 +61,16 @@ public class ExportRange {
         // authenticate
         String token = RestApiConnectionUtils.loginServer(rootURL, username, password);
 
-
         // start the task
-        ExportRange task = new ExportRange(rootURL);
+        CopyZone task = new CopyZone(rootURL);
         task.execute(token);
     }
 
     private void execute(String token) throws Exception {
-        int count = 1;
-        String content = PayloadUtils.loadContent(this.getClass().getSimpleName(), count);
-        //Export ALL ranges and save as CSV
-        RestApiConnectionUtils.downloadFile(rootURL + "dataflowmanagement/ranges/export?exportType=CSV&exportScope=ALL", token, content, "Export ALL ranges and save as CSV","CSV");
-        count ++;
-        //Export ALL ranges and save as PDF
-        content = PayloadUtils.loadContent(this.getClass().getSimpleName(), count);
-        RestApiConnectionUtils.downloadFile(rootURL + "dataflowmanagement/ranges/export?exportType=PDF&exportScope=ALL", token, content, "Export ALL ranges and save as PDF","PDF");
-        count ++;
-        //Export ALL ranges and save as XLS
-        content = PayloadUtils.loadContent(this.getClass().getSimpleName(), count);
-        RestApiConnectionUtils.downloadFile(rootURL + "dataflowmanagement/ranges/export?exportType=XLS&exportScope=ALL", token, content, "Export ALL ranges and save as XLS","XLS");
-        count ++;
-        //Export ALL ranges and save as XLSX
-        content = PayloadUtils.loadContent(this.getClass().getSimpleName(), count);
-        RestApiConnectionUtils.downloadFile(rootURL + "dataflowmanagement/ranges/export?exportType=XLSX&exportScope=ALL", token, content, "Export ALL ranges and save as XLSX","XLSX");
-        //Export SELECTED ranges and save as CSV
-        count ++;
-        content = PayloadUtils.loadContent(this.getClass().getSimpleName(), count);
-        RestApiConnectionUtils.downloadFile(rootURL + "dataflowmanagement/ranges/export?exportType=CSV&exportScope=SELECTED", token, content, "Export SELECTED ranges and save as CSV","CSV");
+        // check if new UI backend enabled
+        RestApiConnectionUtils.ensureZoneBasedDiscoveryIsEnabled(rootURL, token);
+        //Please make sure there is existing zone with id  AWSZone.
+        String content ="{ \"id\": \"AWSZone\"}";
+        RestApiConnectionUtils.doPost(rootURL + "discovery/managementzones?operation=copy", token, content, "COPY AWS ZONE.");
     }
 }

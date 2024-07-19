@@ -20,7 +20,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.microfocus.ucmdb.rest.sample.probesetup;
+package com.microfocus.ucmdb.rest.sample.integration;
 
 import com.microfocus.ucmdb.rest.sample.utils.PayloadUtils;
 import com.microfocus.ucmdb.rest.sample.utils.RestApiConnectionUtils;
@@ -28,12 +28,14 @@ import com.microfocus.ucmdb.rest.sample.utils.RestApiConnectionUtils;
 import java.io.Console;
 import java.util.Scanner;
 
-public class ExportRange {
+public class ClearProbeResultsCache {
+
     private String rootURL;
 
-    public ExportRange(String rootURL) {
+    public ClearProbeResultsCache(String rootURL) {
         this.rootURL = rootURL;
     }
+
     public static void main(String[] args) throws Exception {
         String hostname;
         String port;
@@ -57,37 +59,22 @@ public class ExportRange {
             password = args[3].toCharArray();
         }
 
-        String rootURL = RestApiConnectionUtils.buildRootUrl(hostname, port,false);
+        String rootURL = RestApiConnectionUtils.buildRootUrl(hostname, port, false);
 
         // authenticate
         String token = RestApiConnectionUtils.loginServer(rootURL, username, password);
 
-
         // start the task
-        ExportRange task = new ExportRange(rootURL);
+        ClearProbeResultsCache task = new ClearProbeResultsCache(rootURL);
         task.execute(token);
+
     }
 
     private void execute(String token) throws Exception {
         int count = 1;
         String content = PayloadUtils.loadContent(this.getClass().getSimpleName(), count);
-        //Export ALL ranges and save as CSV
-        RestApiConnectionUtils.downloadFile(rootURL + "dataflowmanagement/ranges/export?exportType=CSV&exportScope=ALL", token, content, "Export ALL ranges and save as CSV","CSV");
-        count ++;
-        //Export ALL ranges and save as PDF
-        content = PayloadUtils.loadContent(this.getClass().getSimpleName(), count);
-        RestApiConnectionUtils.downloadFile(rootURL + "dataflowmanagement/ranges/export?exportType=PDF&exportScope=ALL", token, content, "Export ALL ranges and save as PDF","PDF");
-        count ++;
-        //Export ALL ranges and save as XLS
-        content = PayloadUtils.loadContent(this.getClass().getSimpleName(), count);
-        RestApiConnectionUtils.downloadFile(rootURL + "dataflowmanagement/ranges/export?exportType=XLS&exportScope=ALL", token, content, "Export ALL ranges and save as XLS","XLS");
-        count ++;
-        //Export ALL ranges and save as XLSX
-        content = PayloadUtils.loadContent(this.getClass().getSimpleName(), count);
-        RestApiConnectionUtils.downloadFile(rootURL + "dataflowmanagement/ranges/export?exportType=XLSX&exportScope=ALL", token, content, "Export ALL ranges and save as XLSX","XLSX");
-        //Export SELECTED ranges and save as CSV
-        count ++;
-        content = PayloadUtils.loadContent(this.getClass().getSimpleName(), count);
-        RestApiConnectionUtils.downloadFile(rootURL + "dataflowmanagement/ranges/export?exportType=CSV&exportScope=SELECTED", token, content, "Export SELECTED ranges and save as CSV","CSV");
+        //Clear Probe Results Cache
+        RestApiConnectionUtils.doPatch(rootURL+"integration/jobs?operation=clearcache",token,content,"Clear Probe Results Cache");
+
     }
 }

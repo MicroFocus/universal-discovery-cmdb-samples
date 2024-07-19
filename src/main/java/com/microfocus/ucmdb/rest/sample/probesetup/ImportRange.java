@@ -1,12 +1,12 @@
 /**
- * Copyright 2023 Open Text
- * The only warranties for products and services of Open Text and its affiliates and licensors (“Open Text”) are as may be set forth in the express warranty statements accompanying such products and services.
+ * Copyright 2020 - 2023 Open Text
+ * The only warranties for products and services of Open Text and its
+ * affiliates and licensors ("Open Text") are as may be set forth in the
+ * express warranty statements accompanying such products and services.
  * Nothing herein should be construed as constituting an additional warranty.
- * Open Text shall not be liable for technical or editorial errors or omissions contained herein.
- * The information contained herein is subject to change without notice
- *
- * Except as specifically indicated otherwise, this document contains confidential information and a valid license is required for possession, use or copying.
- * If this work is provided to the U.S. Government, consistent with FAR 12.211 and 12.212, Commercial Computer Software, Computer Software Documentation, and Technical Data for Commercial Items are licensed to the U.S. Government under vendor's standard commercial license.
+ * Open Text shall not be liable for technical or editorial errors or
+ * omissions contained herein.
+ * The information contained herein is subject to change without notice.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -40,7 +40,7 @@ public class ImportRange {
         String hostname;
         String port;
         String username;
-        String password;
+        char[] password;
 
         if (args.length < 4) {
             Scanner sc = new Scanner(System.in);
@@ -51,12 +51,12 @@ public class ImportRange {
             System.out.print("Please enter username for UCMDB: ");
             username = sc.hasNext() ? sc.next() : "";
             Console console = System.console();
-            password = new String(console.readPassword("Please enter password for UCMDB: "));
+            password = console.readPassword("Please enter password for UCMDB: ");
         } else {
             hostname = args[0];
             port = args[1];
             username = args[2];
-            password = args[3];
+            password = args[3].toCharArray();
         }
 
         String rootURL = RestApiConnectionUtils.buildRootUrl(hostname, port, false);
@@ -71,10 +71,10 @@ public class ImportRange {
     }
 
     private void execute(String token) throws Exception {
-        //Import range from CSV with allowOverlap true
+        //Import ranges from CSV with allowOverlap true
         File file= PayloadUtils.loadFile("Export_Data_1686548768110.CSV");
         RestApiConnectionUtils.uploadFile(rootURL + "dataflowmanagement/ranges/import?allowOverlap=true&importType=CSV", token, "Import range from CSV with allowOverlap true",file);
-        //Import range from CSV with allowOverlap false
+        //Import ranges from CSV with allowOverlap false
         RestApiConnectionUtils.uploadFile(rootURL + "dataflowmanagement/ranges/import?allowOverlap=false&importType=CSV", token, "Import range from CSV with allowOverlap false",file);
     }
 }

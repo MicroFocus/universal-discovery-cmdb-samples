@@ -28,12 +28,13 @@ import com.microfocus.ucmdb.rest.sample.utils.RestApiConnectionUtils;
 import java.io.Console;
 import java.util.Scanner;
 
-public class ExportRange {
+public class NetworkScopeConfigurationForCredential {
     private String rootURL;
 
-    public ExportRange(String rootURL) {
+    public NetworkScopeConfigurationForCredential(String rootURL) {
         this.rootURL = rootURL;
     }
+
     public static void main(String[] args) throws Exception {
         String hostname;
         String port;
@@ -62,32 +63,27 @@ public class ExportRange {
         // authenticate
         String token = RestApiConnectionUtils.loginServer(rootURL, username, password);
 
-
         // start the task
-        ExportRange task = new ExportRange(rootURL);
+        NetworkScopeConfigurationForCredential task = new NetworkScopeConfigurationForCredential(rootURL);
         task.execute(token);
-    }
 
+    }
     private void execute(String token) throws Exception {
         int count = 1;
         String content = PayloadUtils.loadContent(this.getClass().getSimpleName(), count);
-        //Export ALL ranges and save as CSV
-        RestApiConnectionUtils.downloadFile(rootURL + "dataflowmanagement/ranges/export?exportType=CSV&exportScope=ALL", token, content, "Export ALL ranges and save as CSV","CSV");
+        //Define the network scope (range level) for the credential
+        RestApiConnectionUtils.doPost(rootURL + "dataflowmanagement/credentials", token, content, "Define the network scope (range level) for the credential ");
         count ++;
-        //Export ALL ranges and save as PDF
+        //Disable the network scope (probe level) for the credential
         content = PayloadUtils.loadContent(this.getClass().getSimpleName(), count);
-        RestApiConnectionUtils.downloadFile(rootURL + "dataflowmanagement/ranges/export?exportType=PDF&exportScope=ALL", token, content, "Export ALL ranges and save as PDF","PDF");
+        RestApiConnectionUtils.doPost(rootURL + "dataflowmanagement/credentials", token, content, "Disable the network scope (probe level) for the credential");
         count ++;
-        //Export ALL ranges and save as XLS
+        //Define the network scope (probe level) for the credential
         content = PayloadUtils.loadContent(this.getClass().getSimpleName(), count);
-        RestApiConnectionUtils.downloadFile(rootURL + "dataflowmanagement/ranges/export?exportType=XLS&exportScope=ALL", token, content, "Export ALL ranges and save as XLS","XLS");
+        RestApiConnectionUtils.doPost(rootURL + "dataflowmanagement/credentials", token, content, "Define the network scope (probe level) for the credential");
         count ++;
-        //Export ALL ranges and save as XLSX
+        //Define the network scope (both probe level and range level) for the credential
         content = PayloadUtils.loadContent(this.getClass().getSimpleName(), count);
-        RestApiConnectionUtils.downloadFile(rootURL + "dataflowmanagement/ranges/export?exportType=XLSX&exportScope=ALL", token, content, "Export ALL ranges and save as XLSX","XLSX");
-        //Export SELECTED ranges and save as CSV
-        count ++;
-        content = PayloadUtils.loadContent(this.getClass().getSimpleName(), count);
-        RestApiConnectionUtils.downloadFile(rootURL + "dataflowmanagement/ranges/export?exportType=CSV&exportScope=SELECTED", token, content, "Export SELECTED ranges and save as CSV","CSV");
+        RestApiConnectionUtils.doPost(rootURL + "dataflowmanagement/credentials", token, content, "Define the network scope (both probe level and range level) for the credential");
     }
 }

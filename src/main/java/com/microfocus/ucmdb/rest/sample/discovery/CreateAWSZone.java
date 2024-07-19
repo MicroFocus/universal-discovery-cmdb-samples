@@ -1,12 +1,19 @@
 /**
- * © Copyright 2011 - 2020 Micro Focus or one of its affiliates
+ * Copyright 2020 - 2023 Open Text
+ * The only warranties for products and services of Open Text and its
+ * affiliates and licensors ("Open Text") are as may be set forth in the
+ * express warranty statements accompanying such products and services.
+ * Nothing herein should be construed as constituting an additional warranty.
+ * Open Text shall not be liable for technical or editorial errors or
+ * omissions contained herein.
+ * The information contained herein is subject to change without notice.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- *
- *     http://www.apache.org/licenses/LICENSE-2.0
- *
+ * <p>
+ * http://www.apache.org/licenses/LICENSE-2.0
+ * <p>
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -23,8 +30,9 @@ import com.microfocus.ucmdb.rest.sample.utils.RestApiConnectionUtils;
 
 import java.io.Console;
 import java.io.IOException;
+import java.util.Arrays;
 import java.util.Scanner;
-
+//test
 public class CreateAWSZone {
     private String rootURL;
 
@@ -35,7 +43,7 @@ public class CreateAWSZone {
         String hostname;
         String port;
         String username;
-        String password;
+        char[] password;
 
         if (args.length < 4) {
             Scanner sc = new Scanner(System.in);
@@ -46,19 +54,18 @@ public class CreateAWSZone {
             System.out.print("Please enter username for UCMDB: ");
             username = sc.hasNext() ? sc.next() : "";
             Console console = System.console();
-            password = new String(console.readPassword("Please enter password for UCMDB: "));
+            password = console.readPassword("Please enter password for UCMDB: ");
         } else {
             hostname = args[0];
             port = args[1];
             username = args[2];
-            password = args[3];
+            password = args[3].toCharArray();
         }
 
         String rootURL = RestApiConnectionUtils.buildRootUrl(hostname, port,false);
 
         // authenticate
         String token = RestApiConnectionUtils.loginServer(rootURL, username, password);
-
 
         // start the task
         CreateAWSZone task = new CreateAWSZone(rootURL);

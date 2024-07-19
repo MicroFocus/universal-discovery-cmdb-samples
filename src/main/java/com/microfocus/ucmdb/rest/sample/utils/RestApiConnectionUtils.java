@@ -1,19 +1,19 @@
 /**
- * Copyright 2023 Open Text
- * The only warranties for products and services of Open Text and its affiliates and licensors (“Open Text”) are as may be set forth in the express warranty statements accompanying such products and services.
+ * Copyright 2020 - 2023 Open Text
+ * The only warranties for products and services of Open Text and its
+ * affiliates and licensors ("Open Text") are as may be set forth in the
+ * express warranty statements accompanying such products and services.
  * Nothing herein should be construed as constituting an additional warranty.
- * Open Text shall not be liable for technical or editorial errors or omissions contained herein.
- * The information contained herein is subject to change without notice
- *
- * Except as specifically indicated otherwise, this document contains confidential information and a valid license is required for possession, use or copying.
- * If this work is provided to the U.S. Government, consistent with FAR 12.211 and 12.212, Commercial Computer Software, Computer Software Documentation, and Technical Data for Commercial Items are licensed to the U.S. Government under vendor's standard commercial license.
+ * Open Text shall not be liable for technical or editorial errors or
+ * omissions contained herein.
+ * The information contained herein is subject to change without notice.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- *
- *     http://www.apache.org/licenses/LICENSE-2.0
- *
+ * <p>
+ * http://www.apache.org/licenses/LICENSE-2.0
+ * <p>
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -46,6 +46,9 @@ import java.nio.charset.Charset;
 import java.security.KeyManagementException;
 import java.security.KeyStoreException;
 import java.security.NoSuchAlgorithmException;
+import java.text.SimpleDateFormat;
+import java.util.Arrays;
+import java.util.Date;
 
 /**
  * Copyright 2021-2023 Open Text
@@ -92,9 +95,9 @@ public class RestApiConnectionUtils {
         return TCP_PROTOCOL + serverIP + ":" + port + (isContainerized ? CONTAINER_CONTEXT : "") + URI_PREFIX;
     }
 
-    public static String loginServer(String url, String userName, String password) throws IOException {
+    public static String loginServer(String url, String userName, char[] plainPwd) throws IOException {
         //HTTPS protocol, server IP and API type as the prefix of REST API URL.
-        if(url == null || url.length() == 0 || userName == null || userName.length() == 0 || password == null || password.length()== 0){
+        if(url == null || url.length() == 0 || userName == null || userName.length() == 0 || plainPwd == null || plainPwd.length== 0){
             System.out.println("Please input correct url or userName or password!");
             return null;
         }
@@ -103,7 +106,7 @@ public class RestApiConnectionUtils {
         JSONObject loginJson = new JSONObject();
         loginJson.put("clientContext","1");
         loginJson.put("username",userName);
-        loginJson.put("password",password);
+        loginJson.put("password",new String(plainPwd));
 
         //Put username and password in HTTP request body and invoke REST API(rest-api/authenticate) with POST method to get token.
         String result = doPost(url + "authenticate", null, loginJson.toString(), "LOG IN TO SERVER.");
@@ -121,6 +124,8 @@ public class RestApiConnectionUtils {
         if (token != null) {
             System.out.println("Connect to server Successfully!");
         }
+
+        Arrays.fill(plainPwd, ' ');
         return token;
     }
 
@@ -159,10 +164,21 @@ public class RestApiConnectionUtils {
         System.out.println(SPLITER);
         System.out.println(description);
         HttpPost httpPost = getPostRequest(url, token, MEDIA_TYPE_JSON, MEDIA_TYPE_OCTET_STREAM, content);
-        String result = storeFile(httpPost,fileType);
+        String result = storeFile(httpPost,"Export_Data_"+System.currentTimeMillis()+"."+fileType);
         System.out.println(SPLITER);
         System.out.println();
         return result;
+    }
+
+    public static void exportFile(String url, String token, String content, String description) throws UnsupportedEncodingException {
+        System.out.println();
+        System.out.println(SPLITER);
+        System.out.println(description);
+        HttpPost httpPost = getPostRequest(url, token, MEDIA_TYPE_JSON, MEDIA_TYPE_JSON, content);
+        SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd_hh-mm-ss");
+        storeFile(httpPost, "discovery_resources_" + df.format(new Date()) + ".json");
+        System.out.println(SPLITER);
+        System.out.println();
     }
 
     public static String uploadFile(String url, String token,  String description, File file) throws IOException {
@@ -430,11 +446,18 @@ public class RestApiConnectionUtils {
         }
         return result;
     }
-    private static String storeFile(HttpRequestBase request,String fileType) {
+    private static String storeFile(HttpRequestBase request,String fileName) {
         CloseableHttpResponse httpResponse = null;
-        File targetFile = new File("Export_Data_"+System.currentTimeMillis()+"."+fileType);
+        File targetFile = null;
         try {
             httpResponse = sendRequest(request);
+            if (httpResponse.getHeaders("Content-Disposition") != null && httpResponse.getHeaders("Content-Disposition")[0] != null) {
+                String fileNameFromResponse = httpResponse.getHeaders("Content-Disposition")[0].toString();
+                if (fileNameFromResponse.split("filename=").length == 2) {
+                    fileName = fileNameFromResponse.split("filename=")[1];
+                }
+            }
+            targetFile = new File(fileName);
             InputStream resultStream=httpResponse.getEntity().getContent();
             try (FileOutputStream outputStream = new FileOutputStream(targetFile, false)) {
                 int read;
