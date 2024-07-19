@@ -62,6 +62,7 @@ public class RestApiConnectionUtils {
     public static final String RETURNED_A_STATUS_CODE_OF = "Returned a status code of ";
     public static final String RESPONSE_RESULT = "Response Result: ";
     public static final String SPLITER = "==============================================================";
+    public static String cookies;
 
     static class HttpDeleteWithBody extends HttpEntityEnclosingRequestBase {
         public static final String METHOD_NAME = "DELETE";
@@ -400,6 +401,9 @@ public class RestApiConnectionUtils {
         }
         if (responseType != null) {
             request.setHeader("Accept", responseType);
+        }
+        if (cookies != null && cookies.length() > 0) {
+            request.setHeader("Cookie", cookies);
         }
     }
 
