@@ -25,6 +25,7 @@ package com.microfocus.ucmdb.rest.sample.packagemanager;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.microfocus.ucmdb.rest.sample.utils.RestApiConnectionUtils;
+import org.apache.http.Header;
 import org.apache.http.client.config.RequestConfig;
 import org.apache.http.client.methods.CloseableHttpResponse;
 import org.apache.http.client.methods.HttpPost;
@@ -61,8 +62,8 @@ public class DeployPackage {
             port = sc.hasNext() ? sc.next() : "";
             System.out.print("Please enter username for UCMDB: ");
             username = sc.hasNext() ? sc.next() : "";
-            Console console = System.console();
-            password = console.readPassword("Please enter password for UCMDB: ");
+            System.out.print("Please enter password for UCMDB: ");
+            password = sc.hasNext() ? sc.next() : "";
             System.out.print("Please enter the absolute path of the package you want to deploy: ");
             packagePath = sc.hasNext() ? sc.next() : "";
         } else {
@@ -97,20 +98,28 @@ public class DeployPackage {
         Path path = Paths.get(this.packABSPath);
         String fileName = path.getFileName().toString();
         String resources;
+        StringBuilder cookies = new StringBuilder();
         try {
             httpResponse = RestApiConnectionUtils.sendMultiPartRequest(httpPost, this.packABSPath, "file", fileName);
             resources = EntityUtils.toString(httpResponse.getEntity());
             int returnCode = httpResponse.getStatusLine().getStatusCode();
-
             if (returnCode != 200) {
                 System.out.println("Failed to upload package to UCMDB Server");
                 System.exit(-1);
+            }
+            Header[] headers = httpResponse.getHeaders("Set-Cookie");
+            // Append all Set-Cookie header values to a single string
+            for (Header header : headers) {
+                cookies.append(header.getValue()).append("; ");
             }
 
         } finally {
             RestApiConnectionUtils.close(httpResponse);
         }
 
+        if (cookies.length() > 0) {
+            RestApiConnectionUtils.cookies = cookies.toString();
+        }
         RestApiConnectionUtils.doPost(rootURL + "packagemanager/packages/" + fileName, token, resources, "DEPLOY THE UPLOADED PACKAGE");
 
         Thread.sleep(5000);
@@ -123,8 +132,9 @@ public class DeployPackage {
             //INIT, IN-PROGRESS, FINISHED, FAILED
             if (node.get("status").asText().equals("FINISHED")) {
                 isNotFinished = false;
+                RestApiConnectionUtils.cookies = null;
                 System.out.println("Deploy package finished");
-            } else if (node.get("status").asText().equals("FINISHED")) {
+            } else if (node.get("status").asText().equals("FAILED")) {
                 isNotFinished = false;
                 System.out.println("Deploy package failed");
             }
